@@ -7,7 +7,11 @@
   let footerHeight = 0;
 </script>
 
-<div id="app" class="relative h-screen w-full overflow-x-hidden" style:--footerH="{footerHeight}px">
+<div
+  id="app"
+  class="relative h-screen w-full overflow-x-hidden pb-15"
+  style:--footerH="{footerHeight}px"
+>
   <slot />
 </div>
 
