@@ -156,7 +156,6 @@ export default defineConfig({
       primaryBlue: "#123870",
       secondaryGreen: "#34BF42",
       grey: "#D9D9D9",
-      ...h,
     },
     fontFamily: {
       primary: "OpenSans",

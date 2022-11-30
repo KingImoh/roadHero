@@ -9,7 +9,7 @@
 
 <div
   id="app"
-  class="relative h-screen w-full overflow-x-hidden pb-15"
+  class="relative h-screen w-full overflow-x-hidden pb-[var(--footerH)]"
   style:--footerH="{footerHeight}px"
 >
   <slot />

@@ -7,6 +7,7 @@
 
 <Search />
 
+<!-- <div class="pt-15 bg-blue" /> -->
 <div class="m-4">
   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores nam voluptates nulla illum at
   consequuntur quibusdam laudantium dignissimos. Consectetur quam deleniti, unde, non dolorem id
