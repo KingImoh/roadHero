@@ -49,9 +49,4 @@
   });
 </script>
 
-<svelte:head>
-  <!-- <script src="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css" rel="stylesheet" /> -->
-</svelte:head>
-
-<div id="map" class="w-screen h-screen -z-1" transition:fly={{ x: 300, duration: 300 }} />
+<div id="map" class="w-screen h-screen -z-1" />
