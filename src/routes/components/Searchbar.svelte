@@ -3,21 +3,23 @@
   import { fly } from "svelte/transition";
 
   import roadhero from "$lib/assets/img/roadhero.png";
+  let header: Element;
 
   let active = false;
 </script>
 
-<header class="flex items-center h-20 w-screen top-0 sticky">
+<header class="flex items-center h-18 w-screen items-center justify-between" bind:this={header}>
   {#if !active}
-    <div class="inline-flex justify-start h-12 p-4" transition:fly={x:20}>
+    <div class="inline-flex justify-start h-20 p-4" in:fly={{ x: -20 }}>
       <img src={roadhero} alt="" srcset="" />
     </div>
   {/if}
-
+  <!-- fixed right-4 top-4 -->
   <div
     class={clsx(
-      "inline-flex fixed right-4 top-4 items-center bg-grey p-4 rounded-full mx-auto max-w-[92%] shadow text-lg transition ease-[ease-out] duration-250",
-      active && "w-screen justify-between ring-2 ring-secondaryGreen py-2 px-4 shadow-xl"
+      "inline-flex  items-center bg-grey p-4 rounded-full shadow text-lg m-4 transition ease-[ease-out] duration-250",
+      active &&
+        "w-screen justify-between ring-2 ring-secondaryGreen mx-auto max-w-[92%] py-2 px-4 shadow-xl"
     )}
   >
     <div

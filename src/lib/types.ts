@@ -13,4 +13,6 @@ export type NavLink = {
   };
 };
 
+export type Coordinates = [number, number];
+
 export type WritableCapacitorStorage<T> = Writable<T>;
