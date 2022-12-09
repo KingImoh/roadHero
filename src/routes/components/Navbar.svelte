@@ -44,7 +44,7 @@
     {#each tabs as { name, path, status, iconName }}
       <a href={path}>
         <div
-          class="tab p-2 w100px rounded-full text-black flex items-center justify-evenly transition ease-out"
+          class="tab p-2 w-[100px] rounded-full text-black flex items-center justify-evenly transition ease-out"
           class:active={status}
         >
           <span class={clsx(iconName, "text-2xl fw100 ", status && "bg-secondaryGreen ")} />

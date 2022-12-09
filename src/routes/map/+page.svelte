@@ -25,7 +25,40 @@
 
     new Marker().setLngLat(center).addTo(map);
 
-    map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
+    map.doubleClickZoom.enable();
+
+    map.dragPan.enable({
+      linearity: 0.3,
+      easing: t => t,
+      maxSpeed: 1400,
+      deceleration: 2500,
+    });
+
+    map.dragRotate.enable();
+    // map.addLayer({
+    //   id: "point",
+    //   type: "circle",
+    //   source: {
+    //     type: "geojson",
+    //     data: {
+    //       type: "FeatureCollection",
+    //       features: [
+    //         {
+    //           type: "Feature",
+    //           properties: {},
+    //           geometry: {
+    //             type: "Point",
+    //             coordinates: center,
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   },
+    //   paint: {
+    //     "circle-radius": 10,
+    //     "circle-color": "#3887be",
+    //   },
+    // });
   }
 
   onMount(() => {
