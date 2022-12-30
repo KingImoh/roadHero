@@ -39,16 +39,15 @@
   <RoadHeroLogo />
 </div>
 
-<div class="fixed bottom-0  w-screen  rounded-t-2xl bg-primaryBlue px-5 py-3 text-white transition">
+<div class="fixed bottom-0  w-screen  rounded-t-2xl bg-black px-5 py-3 text-white transition">
   <div class="container mx-auto flex items-center justify-between">
     {#each tabs as { name, path, status, iconName }}
       <a href={path}>
         <div
-          class="tab p-2 w-[100px] rounded-full text-black flex items-center justify-evenly transition ease-out"
+          class="tab p-2 w-[100px] rounded-full flex items-center justify-evenly transition ease-out"
           class:active={status}
         >
-          <span class={clsx(iconName, "text-2xl fw100 ", status && "bg-secondaryGreen ")} />
-          <!-- <span class={iconName} class:bg-secondaryGreen={status} text-3xl /> -->
+          <span class="{iconName}, text-2xl fw100 " />
           <span text-xs class={status ? "inline-block" : "hidden"}>{name}</span>
         </div>
       </a>
@@ -58,24 +57,7 @@
 
 <style>
   .tab.active {
-    width: 110px;
-    @apply bg-grey;
-  }
-
-  .tab {
-    /* height: 40px; */
-    /* padding: 0.5rem;
-    width: 100px;
-    border-radius: 20px;
-    color: black;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    transition: all 0.3s; */
-  }
-
-  .active.icon {
-    color: #34bf42;
-    font-size: x-large;
+    width: 200px;
+    @apply bg-secondaryGreen;
   }
 </style>

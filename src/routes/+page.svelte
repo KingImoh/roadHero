@@ -21,7 +21,7 @@
 
 <div
   bind:this={header}
-  class={clsx("top-0 sticky bg-white", headerCollides && "border-b-2 border-secondaryGreen")}
+  class={clsx("top-0 sticky bg-white z-999", headerCollides && "border-b-2 border-secondaryGreen")}
 >
   <Search />
 </div>

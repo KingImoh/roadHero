@@ -8,10 +8,7 @@
   let active = false;
 </script>
 
-<header
-  class="flex items-center h-18 w-screen items-center justify-between z-10"
-  bind:this={header}
->
+<header class="flex items-center h-18 w-screen items-center justify-between" bind:this={header}>
   {#if !active}
     <div class="inline-flex justify-start h-20 p-4" in:fly={{ x: -20 }}>
       <img src={roadhero} alt="" srcset="" />

@@ -174,6 +174,11 @@ export default defineConfig({
       /^s-flex-([a-z]+)-?([a-z]*)$/,
       ([, justify, align]) => `flex justify-${justify} items-${align || "center"}`,
     ],
+    {
+      // s-flex-col stands for flex-col-shortcut
+      // to avoid mixups with default flex utilities like flex-col
+      "s-flex-col": "flex flex-col",
+    },
     // use when width and height values are the same
     [/^square-(.*)$/, ([, v]) => `h-${v} w-${v}`],
   ],

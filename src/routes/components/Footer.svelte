@@ -12,24 +12,24 @@
       path: "/",
       name: "Home",
       classes: {
-        fill: "i-mingcute-home-3-fill !text-xl  text-secondaryGreen",
-        line: "i-mingcute-home-3-line !text-xl text-secondaryGreen",
+        fill: "i-mingcute-home-3-fill !text-xl  ",
+        line: "i-mingcute-home-3-line !text-xl ",
       },
     },
     {
       path: "/map",
       name: "Map",
       classes: {
-        fill: "i-mingcute-map-fill !text-xl text-secondaryGreen",
-        line: "i-mingcute-map-line !text-xl text-secondaryGreen",
+        fill: "i-mingcute-map-fill !text-xl ",
+        line: "i-mingcute-map-line !text-xl ",
       },
     },
     {
       path: "/profile",
       name: "Profile",
       classes: {
-        fill: "i-material-symbols-person-4-rounded !text-xl text-secondaryGreen",
-        line: "i-material-symbols-person-4-outline-rounded !text-xl text-secondaryGreen",
+        fill: "i-material-symbols-person-4-rounded !text-xl ",
+        line: "i-material-symbols-person-4-outline-rounded !text-xl ",
         // wrapper:
         //   "after:(content-empty absolute top-2px right-2px square-2 bg-orange-v-400 rounded-full)",
       },
@@ -69,7 +69,7 @@
 </script>
 
 <!-- footer nav -->
-<footer class="fixed bottom-0 left-0 w-screen" bind:clientHeight={footerHeight}>
+<footer class="fixed bottom-0 left-0 w-screen z-100" bind:clientHeight={footerHeight}>
   <div
     class="fixed z-1  bottom-[2.25rem] right-4 inline-flex w-15 h-15 items-center p-4 justify-center rounded-full bg-grey ring-2 ring-secondaryGreen ring-offset-4"
   >
@@ -84,8 +84,10 @@
         <div
           use:getLinkWidth
           class={clsx(
-            "transition-all duration-250 px-4 py-2 s-flex-start-center text-black rounded-10",
-            currentPathActive ? "bg-grey gap-1 w-[var(--linkWidth)]" : "w-[var(--linkWOTS)]"
+            "transition-all duration-250 px-4 py-2 s-flex-start-center text-white rounded-10",
+            currentPathActive
+              ? "bg-secondaryGreen gap-1 w-[var(--linkWidth)]"
+              : "w-[var(--linkWOTS)]"
           )}
         >
           <!-- icon wrapper -->
