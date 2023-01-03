@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="w-full min-h-450px max-h-550px rounded-3xl border p-3 shadow mb-6 flex flex-col justify-evenly"
+  class="w-full min-h-450px max-h-550px rounded-3xl border p-3 shadow mb-6 flex flex-col justify-evenly bg-white"
 >
   <div class="h-20% flex items-center">
     <div class="profilepic rounded-full w-15 h-15 bg-black " />
@@ -26,7 +26,7 @@
       </div>
     </div>
 
-    <div class="ml-a place-self-start i-mingcute-more-1-line text-xl" />
+    <div class="ml-a place-self-start i-mingcute-more-1-line text-sm" />
   </div>
 
   <div class="h-65% space-y-2">
@@ -87,3 +87,10 @@
     </div>
   </div>
 </div>
+
+<style>
+  :root {
+    --swiper-navigation-size: 20px;
+    --swiper-theme-color: #36bf43;
+  }
+</style>

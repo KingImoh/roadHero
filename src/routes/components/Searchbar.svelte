@@ -5,17 +5,20 @@
   import roadhero from "$lib/assets/img/roadhero.png";
   let header: Element;
 
-  let active = false;
+  // let active = false;
 </script>
 
-<header class="flex items-center h-18 w-screen items-center justify-between" bind:this={header}>
-  {#if !active}
+<header
+  class="flex flex-col container items-center h-fit w-screen items-center justify-between p-6 shadow-lg pb-8"
+  bind:this={header}
+>
+  <!-- {#if !active}
     <div class="inline-flex justify-start h-20 p-4" in:fly={{ x: -20 }}>
       <img src={roadhero} alt="" srcset="" />
     </div>
-  {/if}
+  {/if} -->
   <!-- fixed right-4 top-4 -->
-  <div
+  <!-- <div
     class={clsx(
       "inline-flex  items-center bg-grey p-4 rounded-full shadow text-lg m-4 transition ease-[ease-out] duration-250",
       active &&
@@ -47,5 +50,20 @@
     >
       <div class="i-mingcute-close-line" class:hidden={!active} />
     </div>
+  </div> -->
+
+  <div class="ml-auto mb-4 square-40px bg-primaryBlue rounded-lg">
+    <div class="ic:baseline-notifications-none text-lg" />
+  </div>
+
+  <div class="w-full flex rounded overflow-hidden">
+    <div class="bg-secondaryGreen w-50px flex justify-between items-center">
+      <div class="i-ri-search-line text-white mx-auto" />
+    </div>
+    <input
+      class="px-5 py-3 bg-grey fw70 outline-none text-sm w-full"
+      type="text"
+      placeholder="Search location..."
+    />
   </div>
 </header>
