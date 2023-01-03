@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="w-full min-h-450px max-h-550px rounded-3xl border p-3 shadow mb-6 s-flex-col justify-evenly z-1"
+  class="w-full min-h-450px max-h-550px rounded-3xl border p-3 shadow mb-6 flex flex-col justify-evenly"
 >
   <div class="h-20% flex items-center">
     <div class="profilepic rounded-full w-15 h-15 bg-black " />
