@@ -26,9 +26,19 @@
 <div class="sticky top-0 z-999 bg-white">
   <Search />
 </div>
-<!--  -->
+
 <div class="m-4 px-1" id="container">
-  {#each [1, 2, 3, 4, 5] as times}
+  <select
+    name="fliter"
+    id=""
+    class="border border-primaryBlue bg-transparent p-2 mb-4 rounded-lg text-primaryBlue outline-none"
+  >
+    <option value="new">Newest</option>
+    <option value="appreciated">Appreciated</option>
+    <option value="resolved">Resolved</option>
+  </select>
+
+  {#each [...Array(10)] as times}
     <Post />
   {/each}
 </div>

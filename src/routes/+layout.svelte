@@ -5,8 +5,11 @@
 
   import Navbar from "./components/Navbar.svelte";
   import Footer from "./components/Footer.svelte";
+  // import Welcome from "./components/Welcome.svelte";
   let footerHeight = 0;
 </script>
+
+<!-- <Welcome /> -->
 
 <div
   id="app"
@@ -17,4 +20,3 @@
 </div>
 
 <Footer bind:footerHeight />
-<!-- <Navbar /> -->
