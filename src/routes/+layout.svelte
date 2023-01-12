@@ -5,11 +5,13 @@
 
   import Navbar from "./components/Navbar.svelte";
   import Footer from "./components/Footer.svelte";
+  import Login from "./components/Login.svelte";
   // import Welcome from "./components/Welcome.svelte";
   let footerHeight = 0;
 </script>
 
 <!-- <Welcome /> -->
+<!-- <Login /> -->
 
 <div
   id="app"

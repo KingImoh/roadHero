@@ -3795,6 +3795,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"svelte-system-info@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "svelte-system-info@npm:1.0.0"
+  checksum: 0fb252270b381d1e7ba738cead7bb5eaf4cfa0c00cf1087e9aa35906b7358cb4baba1091014e2e7fdd18f7ee7700a4f61e0fefb7071f393b8e63dcec8ebd95d5
+  languageName: node
+  linkType: hard
+
 "svelte@npm:^3.53.1":
   version: 3.53.1
   resolution: "svelte@npm:3.53.1"
@@ -3826,6 +3833,7 @@ __metadata:
     svelte: ^3.53.1
     svelte-check: ^2.9.2
     svelte-preprocess: ^4.10.7
+    svelte-system-info: ^1.0.0
     swiper: ^8.4.5
     tslib: ^2.4.1
     typescript: ^4.9.3
