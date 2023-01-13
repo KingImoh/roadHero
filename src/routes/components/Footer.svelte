@@ -13,7 +13,7 @@
       name: "Home",
       classes: {
         fill: "i-mingcute-home-3-fill !text-xl  ",
-        line: "i-mingcute-home-3-line !text-xl ",
+        line: "i-mingcute-home-3-line !text-xl opacity-50 ",
       },
     },
     {
@@ -21,7 +21,7 @@
       name: "Map",
       classes: {
         fill: "i-mingcute-map-fill !text-xl ",
-        line: "i-mingcute-map-line !text-xl ",
+        line: "i-mingcute-map-line !text-xl opacity-50 ",
       },
     },
     {
@@ -29,7 +29,7 @@
       name: "Profile",
       classes: {
         fill: "i-material-symbols-person-4-rounded !text-xl ",
-        line: "i-material-symbols-person-4-outline-rounded !text-xl ",
+        line: "i-material-symbols-person-4-outline-rounded !text-xl opacity-50  ",
         // wrapper:
         //   "after:(content-empty absolute top-2px right-2px square-2 bg-orange-v-400 rounded-full)",
       },
@@ -93,16 +93,16 @@
           <!-- icon wrapper -->
           <div class={clsx("flex relative", !currentPathActive && classes.wrapper)}>
             <div
-              class={clsx(
-                "transition-all duration-250 text-xl relative",
-                currentPathActive ? classes.fill : classes.line
-              )}
+              class={clsx("text-xl relative", currentPathActive ? classes.fill : classes.line)}
             />
           </div>
 
           <!-- page link name -->
           <span
-            class="block text-xs opacity-0 transition ease-[ease-out] duration-250"
+            class={clsx(
+              "block text-xs opacity-0 transition ease-[ease-out]",
+              currentPathActive ? "duration-300" : "duration-50"
+            )}
             class:opacity-100={currentPathActive}
           >
             {name}

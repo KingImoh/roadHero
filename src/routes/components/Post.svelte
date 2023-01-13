@@ -13,7 +13,7 @@
   import clsx from "clsx";
 
   let liked = false;
-  let commented = false;
+  let commented = true;
 </script>
 
 <div
@@ -96,17 +96,16 @@
 
   <!-- </div> -->
 
-  <div class="pt-3 flex justify-between text-xs">
-    <div class=" ">2,340 <span class="text-xs">thumbs-up</span></div>
-    <div class=" ">340 <span class="text-xs">comments</span></div>
+  <div class="pt-3 flex justify-between text-xs text-primaryBlue">
+    <div class=" opacity-30">2,340 <span class="text-xs">thumbs-up</span></div>
+    <div class=" opacity-50">340 <span class="text-xs">comments</span></div>
   </div>
 
   <!-- Comment section -->
   {#if commented}
-    <div class="w-full my-4 mx-auto flex items-center">
-      <div class="h-1px opacity-50 bg-[#E8E8E8] w-35%" />
-      <div class="text-xs text-[#E8E8E8]">view comments</div>
-      <div class="h-1px opacity-50 bg-[#E8E8E8] w-35%" />
+    <div class="w-full my-4 mx-auto">
+      <div class="text-xs text-primaryBlue opacity-70 mb-3">view comments</div>
+      <div class="h-1px opacity-50 bg-[#E8E8E8] w-full" />
     </div>
 
     <div class="bg-grey w-full p-3 rounded-lg flex justify-between">

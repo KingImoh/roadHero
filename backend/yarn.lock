@@ -39,6 +39,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/engines@npm:4.8.1":
+  version: 4.8.1
+  resolution: "@prisma/engines@npm:4.8.1"
+  checksum: 7ddddf5dcecbf2dd74e061fcf60c4ceef8a1c18e55aec3773ebcefb0edf0f8cf3b3e62eb7ad46fb82a85546ace5c626e1cc29b5d600ddf51989c8f07140600ca
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:^18.11.18":
   version: 18.11.18
   resolution: "@types/node@npm:18.11.18"
@@ -119,6 +126,7 @@ __metadata:
   dependencies:
     "@types/node": ^18.11.18
     fastify: ^4.11.0
+    prisma: ^4.8.1
     typescript: ^4.9.4
   languageName: unknown
   linkType: soft
@@ -371,6 +379,18 @@ __metadata:
   bin:
     pino: bin.js
   checksum: 69256469221b332776333069d637100053eb15dc7baa3f95897d7864bf2e6fd99f15cfd9cfc94b56e7b00da2e6b349c49affcff1abaca9a3d4b7ba63ff86b4f0
+  languageName: node
+  linkType: hard
+
+"prisma@npm:^4.8.1":
+  version: 4.8.1
+  resolution: "prisma@npm:4.8.1"
+  dependencies:
+    "@prisma/engines": 4.8.1
+  bin:
+    prisma: build/index.js
+    prisma2: build/index.js
+  checksum: 6f09e9add231c1f38cc01051037c0abb5ff4db6773d5543ce8917beee76b15351474e97b0c06eaa25267f0a65e7596a8428292317c53d1868e9aaa09cd6e0705
   languageName: node
   linkType: hard
 

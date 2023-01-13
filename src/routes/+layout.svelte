@@ -6,12 +6,25 @@
   import Navbar from "./components/Navbar.svelte";
   import Footer from "./components/Footer.svelte";
   import Login from "./components/Login.svelte";
+  import Modal from "./components/Modal.svelte";
+  import { modalState } from "$lib/stores";
+  import { goto } from "$app/navigation";
+
   // import Welcome from "./components/Welcome.svelte";
   let footerHeight = 0;
-</script>
 
-<!-- <Welcome /> -->
-<!-- <Login /> -->
+  // if user is logged in
+  // remain in current page
+  // else
+  // redirect to onboarding page
+  // goto("/onboarding");
+
+  // if (!user) {
+  //   goto("/onboarding")
+  // }
+
+  // https://capacitorjs.com/docs/apis/cookies
+</script>
 
 <div
   id="app"
@@ -22,3 +35,7 @@
 </div>
 
 <Footer bind:footerHeight />
+
+{#if $modalState.title}
+  <Modal />
+{/if}

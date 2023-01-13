@@ -3,6 +3,7 @@
   import mapboxgl, { Map, GeoJSONSource, type LngLatLike, Marker } from "mapbox-gl";
   import { onMount } from "svelte";
   import MapSearch from "./MapSearch.svelte";
+  import { modalState } from "$lib/stores";
 
   type Coordinates = [number, number];
 
@@ -60,88 +61,102 @@
     }
   }
 
-  // onMount(() => {
-  //   try {
-  //     mapboxgl.accessToken =
-  //       "pk.eyJ1Ijoia2luZ2ltb2giLCJhIjoiY2xhdjVmNWIwMDJnazNxc2o3aW14bHJseCJ9._HBlCjjOJ5fD-y6OoRqI0Q";
+  onMount(() => {
+    try {
+      mapboxgl.accessToken =
+        "pk.eyJ1Ijoia2luZ2ltb2giLCJhIjoiY2xhdjVmNWIwMDJnazNxc2o3aW14bHJseCJ9._HBlCjjOJ5fD-y6OoRqI0Q";
 
-  //     if (!mapPresent) {
-  //       navigator.geolocation.getCurrentPosition(onSuccess, onError, {
-  //         enableHighAccuracy: true,
-  //       });
-  //     }
+      if (!mapPresent) {
+        navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+          enableHighAccuracy: true,
+        });
+      }
 
-  //     function onSuccess(position: GeolocationPosition) {
-  //       let supposedCurrentPos: Coordinates = [position.coords.longitude, position.coords.latitude];
-  //       setupMap(supposedCurrentPos);
-  //     }
+      function onSuccess(position: GeolocationPosition) {
+        let supposedCurrentPos: Coordinates = [position.coords.longitude, position.coords.latitude];
+        setupMap(supposedCurrentPos);
+      }
 
-  //     function onError() {
-  //       let bazeUniversityBlockDLibrary = [7.405533646178658, 9.006449673032344];
-  //       let bazeUniversity: Coordinates = [7.405952340281745, 9.007773176138375];
-  //       setupMap(bazeUniversity);
-  //     }
+      function onError() {
+        let bazeUniversityBlockDLibrary = [7.405533646178658, 9.006449673032344];
+        let bazeUniversity: Coordinates = [7.405952340281745, 9.007773176138375];
+        setupMap(bazeUniversity);
+      }
 
-  //     function setupMap(center: Coordinates) {
-  //       currentPos = center;
+      function setupMap(center: Coordinates) {
+        currentPos = center;
 
-  //       map = new Map({
-  //         container: "map",
-  //         style: "mapbox://styles/mapbox/streets-v11",
-  //         center: currentPos,
-  //         zoom: 14,
-  //       });
+        map = new Map({
+          container: "map",
+          style: "mapbox://styles/mapbox/streets-v11",
+          center: currentPos,
+          zoom: 14,
+        });
 
-  //       addMarker(map, currentPos);
+        addMarker(map, currentPos);
 
-  //       // Add zoom and rotation controls to the map.
-  //       map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
+        // Add zoom and rotation controls to the map.
+        map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
 
-  //       map.on("load", () => {
-  //         // make an initial directions request that
-  //         // starts and ends at the same location
-  //         getRoute(currentPos);
-  //         mapPresent = true;
+        map.on("load", () => {
+          // make an initial directions request that
+          // starts and ends at the same location
+          getRoute(currentPos);
+          mapPresent = true;
 
-  //         // Add starting point to the map
-  //         map.addLayer({
-  //           id: "point",
-  //           type: "circle",
-  //           source: {
-  //             type: "geojson",
-  //             data: {
-  //               type: "FeatureCollection",
-  //               features: [
-  //                 {
-  //                   type: "Feature",
-  //                   properties: {},
-  //                   geometry: {
-  //                     type: "Point",
-  //                     coordinates: currentPos,
-  //                   },
-  //                 },
-  //               ],
-  //             },
-  //           },
-  //           paint: {
-  //             "circle-radius": 10,
-  //             "circle-color": "#3887be",
-  //           },
-  //         });
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // });
+          // Add starting point to the map
+          map.addLayer({
+            id: "point",
+            type: "circle",
+            source: {
+              type: "geojson",
+              data: {
+                type: "FeatureCollection",
+                features: [
+                  {
+                    type: "Feature",
+                    properties: {},
+                    geometry: {
+                      type: "Point",
+                      coordinates: currentPos,
+                    },
+                  },
+                ],
+              },
+            },
+            paint: {
+              "circle-radius": 10,
+              "circle-color": "#3887be",
+            },
+          });
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  });
 </script>
 
-<MapSearch />
-
-<div class="square-full relative z-1 bg-blue">
+<div class="square-full relative z-1">
   <div class="square-full" id="map">
     {#if !mapPresent}
       <div class="square-full text-center">Loading map</div>
     {/if}
   </div>
 </div>
+<MapSearch />
+
+<!-- <absolute-bottom-right>
+  <button
+    class="btn btn-primary"
+    on:click={() => {
+      modalState.set({
+        show: true,
+        title: "Search for a location",
+        body: MapSearch,
+      });
+    }}
+  >
+    Search
+  </button>
+</absolute-bottom-right> -->

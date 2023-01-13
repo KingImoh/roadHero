@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
   import mapboxgl, { Map, GeoJSONSource, type LngLatLike, Marker } from "mapbox-gl";
+  import { modalState } from "$lib/stores";
 
   type Coordinates = [number, number];
   // Q: what is the role of the variable below?
@@ -69,9 +70,18 @@
         "pk.eyJ1Ijoia2luZ2ltb2giLCJhIjoiY2xhdjVmNWIwMDJnazNxc2o3aW14bHJseCJ9._HBlCjjOJ5fD-y6OoRqI0Q";
 
       if (!mapPresent) {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError, {
-          enableHighAccuracy: true,
-        });
+        // $modalState = {
+        //   title: "",
+        //   content: "Please wait while we load the map",
+        //   buttons: [{ text: "Ok", onclick: () => {} }],
+        //   icon: "loading",
+        // };
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(onSuccess, onError);
+        } else {
+          onError();
+        }
       }
 
       function onSuccess(position: GeolocationPosition) {
