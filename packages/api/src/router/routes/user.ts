@@ -17,7 +17,6 @@ export default router({
       })
     )
     .mutation(({ input, ctx }) => {
-      const user = ctx.prisma.user.create({ data: { name: input.name, email: input.email } });
-      return user;
+      ctx.user;
     }),
 });
