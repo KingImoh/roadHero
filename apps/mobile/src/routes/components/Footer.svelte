@@ -4,6 +4,7 @@
   import { page } from "$app/stores";
   import type { NavLink } from "$lib/types";
   import RoadHeroLogo from "./RoadHeroLogo.svelte";
+  import { goto } from "$app/navigation";
 
   export let footerHeight: number;
 
@@ -70,8 +71,10 @@
 
 <!-- footer nav -->
 <footer class="fixed bottom-0 left-0 w-screen z-100" bind:clientHeight={footerHeight}>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     class="fixed z-1  bottom-[2.25rem] right-4 inline-flex w-15 h-15 items-center p-4 justify-center rounded-full bg-grey ring-2 ring-secondaryGreen ring-offset-4"
+    on:click={() => goto("/report")}
   >
     <RoadHeroLogo />
   </div>

@@ -12,6 +12,7 @@
   // Import Swiper styles
   import "swiper/css";
   import "swiper/css/pagination";
+  import { goto } from "$app/navigation";
 </script>
 
 <div class="flex flex-col items-center p-10 space-y-35 h-screen bg-primaryBlue">
@@ -38,8 +39,10 @@
     </Swiper>
   </div>
 
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     class="bg-secondaryGreen p-4 flex flex-col-items-center justify-center text-white rounded-lg w-90%"
+    on:click={goto("/welcome/login")}
   >
     Get Started!
   </div>

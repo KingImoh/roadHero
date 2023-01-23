@@ -1,6 +1,5 @@
 <script lang="ts">
   import rhlogo from "$lib/assets/img/roadhero_white.png";
-  import RoadHeroLogo from "../components/RoadHeroLogo.svelte";
   import welcome from "$lib/assets/img/welcome-1.png";
   import welcome2 from "$lib/assets/img/welcome-2.png";
   import welcome3 from "$lib/assets/img/welcome-3.png";
@@ -38,11 +37,14 @@
     </Swiper>
   </div>
 
-  <div
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+
+  <a
+    href="/welcome/login"
     class="bg-secondaryGreen p-4 flex flex-col-items-center justify-center text-white rounded-lg w-90%"
   >
     Get Started!
-  </div>
+  </a>
 </div>
 
 <style>

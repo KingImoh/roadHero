@@ -9,9 +9,15 @@
   import Modal from "./components/Modal.svelte";
   import { modalState } from "$lib/stores";
   import { goto } from "$app/navigation";
+  import { currentUser } from "@packages/api/src/context";
+  import { page } from "$app/stores";
 
   // import Welcome from "./components/Welcome.svelte";
   let footerHeight = 0;
+
+  if (!$currentUser) {
+    goto("/welcome");
+  }
 
   // if user is logged in
   // remain in current page
@@ -24,23 +30,18 @@
   // }
 
   // https://capacitorjs.com/docs/apis/cookies
-  function welcome() {
-    goto("/welcome");
-  }
 </script>
 
-{#if true}
-  <div
-    id="app"
-    class="relative h-screen w-full overflow-x-hidden pb-[var(--footerH)] bg-[#F5F5F5]"
-    style:--footerH="{footerHeight}px"
-  >
-    <slot />
-  </div>
+<div
+  id="app"
+  class="relative h-screen w-full overflow-x-hidden pb-[var(--footerH)] bg-[#F5F5F5]"
+  style:--footerH="{footerHeight}px"
+>
+  <slot />
+</div>
 
+{#if $currentUser && !$page.url.pathname.includes("comments")}
   <Footer bind:footerHeight />
-{:else}
-  {welcome()}
 {/if}
 
 {#if $modalState.title}

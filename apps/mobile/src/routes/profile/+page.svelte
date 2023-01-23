@@ -1,6 +1,11 @@
 <script lang="ts">
   import roadheroLogo from "$lib/assets/img/roadheroLogo.png";
   import profilePicture from "$lib/assets/img/profile.jpg";
+  import { iconType, modalState } from "$lib/stores";
+  import { goto } from "$app/navigation";
+  import { currentUser, pb } from "@packages/api/src/context";
+  import { onMount } from "svelte";
+  import type { BaseModel, Record } from "pocketbase";
   // import badRoad from "$lib/assets/img/bad-roads.jpeg";
   // import RoadHeroLogo from "../components/RoadHeroLogo.svelte";
   // import { onDestroy, onMount } from "svelte";
@@ -21,6 +26,42 @@
   //   if (!header) return;
   //   headerCollides = isCollide(header, document.querySelector("#container")!);
   // }
+  let user: Record;
+  let id = $currentUser?.id as string;
+  let avatar: string;
+  console.log(id);
+
+  onMount(async () => {
+    const user = await pb.collection("users").getOne(id);
+
+    avatar = pb.getFileUrl(user, user?.avatar);
+    console.log(user, avatar);
+  });
+
+  const signOut = () => {
+    // "logout" the last authenticated model
+    pb.authStore.clear();
+    goto("/welcome");
+
+    $modalState = {
+      title: "Sign Out",
+      msg: "You have been logged out successfully",
+      icon: iconType.success,
+      buttons: [
+        {
+          text: "OK",
+          handler: () => {
+            $modalState = {
+              title: "",
+              msg: "",
+              icon: "",
+              buttons: [],
+            };
+          },
+        },
+      ],
+    };
+  };
 </script>
 
 <!-- <div w-full>
@@ -62,11 +103,11 @@
 >
   <div
     class="bg-center bg-no-repeat bg-cover square-20 rounded-full mx-auto ring-secondaryGreen ring-2 ring-offset-2"
-    style:background-image="url('{profilePicture}')"
+    style:background-image="url({avatar})"
   />
 
   <div class="pt7 pb-2 text-xl max-w-80 flex items-center space-x-2xl">
-    Imoh Gbinije
+    {$currentUser?.username}
     <!-- svelte-ignore a11y-img-redundant-alt -->
     <img
       src={roadheroLogo}
@@ -75,7 +116,7 @@
     />
   </div>
 
-  <div class="text-sm text-grey opacity-50">princeemmanuel05@gmail.com</div>
+  <div class="text-sm text-grey opacity-50">{$currentUser?.email}</div>
 
   <div
     class="flex border border-2 p-2 rounded-lg text-sm mt-6 border-secondaryGreen text-secondaryGreen space-x-2"
@@ -91,7 +132,11 @@
     <div class="fw300">Settings</div>
   </div>
 
-  <div class="w-85% shadow rounded-lg h-65px flex items-center bg-white text-red">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div
+    class="w-85% shadow rounded-lg h-65px flex items-center bg-white text-red"
+    on:click={signOut}
+  >
     <div class="i-ion-ios-log-out mx-4 w-15%" />
     <div class="fw300">Log Out</div>
   </div>
