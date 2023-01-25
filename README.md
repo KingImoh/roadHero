@@ -1,48 +1,42 @@
-# create-svelte
+# Turborepo Svelte & Fastify w/trpc & prisma starter
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This is an custom made Turborepo starter.
 
-| Technology  | Usage             |
-| ----------- | ----------------- | ------------- | --- |
-| [Sveltekit] | Svelte Framework  |
-| [UnoCSS]    | Atomic Css engine |
-| <!--        | [Vanilla Extract] | Type-safe CSS | --> |
+## What's inside?
 
-## Creating a project
+This Turborepo includes the following packages/apps:
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Apps and Packages
 
-```bash
-# create a new project in the current directory
-npx degit adroyt/sveltekit
+- `mobile`: a [svelte-kit] app
+- `api`: a [fastify] app with [trpc] and [prisma]
+- `eslint-config-custom`: `eslint` configurations (includes `eslint-plugin-svelte` and `eslint-config-prettier`)
 
-# create a new project in my-app
-npx degit adroyt/sveltekit my-app
+Each package/app is 100% [TypeScript].
+
+### Utilities
+
+This Turborepo has some additional tools already setup for you:
+
+- [TypeScript] for static type checking
+- [ESLint] for code linting
+- [Prettier] for code formatting
+
+## Using this example
+
+Run the following command:
+
+```sh
+npx degit HanielU/turbo-sk-fastify-trpc-prisma turbo-fastify
+cd turbo-fastify
+yarn
+git init . && git add . && git commit -m "Init"
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `yarn` (or `npm install` or `pnpm install`), start a development server:
-
-```bash
-yarn dev
-
-# or start the server and open the app in a new browser tab
-yarn dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-yarn build
-```
-
-You can preview the production build with `yarn preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-[sveltekit]: https://kit.svelte.dev
-[unocss]: https://github.com/unocss/unocss
-[vanilla extract]: https://vanilla-extract.style
+<!-- initialise all the links used -->
+[trpc]: https://trpc.io
+[fastify]: https://www.fastify.io
+[prisma]: https://www.prisma.io
+[svelte-kit]: https://kit.svelte.dev
+[typescript]: https://www.typescriptlang.org
+[eslint]: https://eslint.org
+[prettier]: https://prettier.io
