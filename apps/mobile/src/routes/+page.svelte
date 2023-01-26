@@ -24,11 +24,14 @@
   let posts: any[] = [];
 
   onMount(async () => {
-    const resultList = await pb.collection("reports").getList(1, 10, {
-      filter: 'created >= "2022-01-01 00:00:00"',
-    });
-
-    posts = resultList.items;
+    try {
+      const reports = await pb.collection("reports").getList(1, 10, {
+        filter: 'created >= "2022-01-01 00:00:00"',
+      });
+      posts = reports.items;
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   let selected = false;

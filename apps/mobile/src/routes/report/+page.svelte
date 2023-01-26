@@ -48,68 +48,11 @@
       mapboxsearch.autofill({
         accessToken:
           "pk.eyJ1Ijoia2luZ2ltb2giLCJhIjoiY2xhdjVmNWIwMDJnazNxc2o3aW14bHJseCJ9._HBlCjjOJ5fD-y6OoRqI0Q",
+        options: { country: "NG" },
       });
     };
   });
 </script>
-
-<!-- <svelte:head>
-  <script>
-    script = document.createElement("script");
-    script.src = "https://api.mapbox.com/search-js/v1.0.0-beta.14/web.js";
-    script.defer = true;
-    script.id = "search-js";
-    let body = document.head;
-
-    body.appendChild(script);
-    console.log("body", body);
-  </script>
-</svelte:head> -->
-
-<!-- start -->
-<!-- <script lang="ts">
-  import { browser } from "$app/environment";
-  import { onMount } from "svelte";
-
-  let widgetHeight: number;
-
-  onMount(() =>
-    setTimeout(() => {
-      if (browser && document) {
-        const scp = document.createElement("script");
-        const widgetContainer = document.createElement("div");
-        const widgetContainer_Widget = document.createElement("div");
-        const tape = document.querySelector("#tape");
-
-        widgetContainer.className = ".tradingview-widget-container";
-        widgetContainer_Widget.className = ".tradingview-widget-container__widget";
-
-        scp.type = "text/javascript";
-        scp.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js";
-        scp.defer = true;
-        scp.innerHTML = JSON.stringify({
-          symbols: [
-            { proName: "FOREXCOM:SPXUSD", title: "S&P 500" },
-            { proName: "FOREXCOM:NSXUSD", title: "US 100" },
-            { proName: "FX_IDC:EURUSD", title: "EUR/USD" },
-            { proName: "BITSTAMP:BTCUSD", title: "Bitcoin" },
-            { proName: "BITSTAMP:ETHUSD", title: "Ethereum" }
-          ],
-          showSymbolLogo: true,
-          colorTheme: "dark",
-          isTransparent: false,
-          displayMode: "adaptive",
-          locale: "en"
-        });
-
-        widgetContainer.append(widgetContainer_Widget, scp);
-        tape?.appendChild(widgetContainer);
-      }
-    }, 500)
-  );
-</sc> -->
-
-<!-- a reporting page with support for video and description -->
 
 <div id="body" />
 <divi class="p-6 flex space-x-2 items-center bg-primary-blue text-white">
@@ -123,25 +66,21 @@
 <div class="p-6">
   <div class="">Report location</div>
   <div class="py-3 space-y-5">
-    <input
-      type="text"
-      class="w-full bg-gray-200 p-4 rounded-lg outline-none"
-      placeholder="Address"
-      required
-      autocomplete="street-address"
-    />
-
-    <select
-      name="city"
-      id="city"
-      class="w-full p-4 rounded-lg bg-gray-200 border-3 outline-none"
-      autocomplete="address-level2"
-    >
+    <select name="city" id="city" class="w-full p-4 rounded-lg bg-gray-200 border-3 outline-none" a>
       <option selected>Select your City</option>
       {#each cities as city}
         <option value={city.id}>{city.name}</option>
       {/each}
     </select>
+    <form>
+      <input
+        type="text"
+        class="w-full bg-gray-200 p-4 rounded-lg outline-none"
+        placeholder="Address"
+        required
+        autocomplete="street-address"
+      />
+    </form>
   </div>
 
   <div class="py-3">

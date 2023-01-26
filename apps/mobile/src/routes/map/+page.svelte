@@ -143,20 +143,5 @@
       <div class="square-full text-center">Loading map</div>
     {/if}
   </div>
+  <MapSearch />
 </div>
-<MapSearch />
-
-<!-- <absolute-bottom-right>
-  <button
-    class="btn btn-primary"
-    on:click={() => {
-      modalState.set({
-        show: true,
-        title: "Search for a location",
-        body: MapSearch,
-      });
-    }}
-  >
-    Search
-  </button>
-</absolute-bottom-right> -->

@@ -1,3 +1,4 @@
+import { Preferences } from "@capacitor/preferences";
 import { writable } from "svelte/store";
 import { capacitorStorageStore } from "./capacitor-storage";
 
@@ -17,3 +18,10 @@ export const modalState = writable({
   buttons: [{ text: "", handler: () => {} }],
   icon: "",
 } as any);
+
+const { value } = (await Preferences.get({ key: "RoadheroSearchHistory" })) || {};
+
+// export const searchHistory = writable(value ?? []);
+export const searchHistory = writable(value ? JSON.parse(value) : []);
+
+if (!value) await Preferences.set({ key: "RoadheroSearchHistory", value: JSON.stringify([]) });
