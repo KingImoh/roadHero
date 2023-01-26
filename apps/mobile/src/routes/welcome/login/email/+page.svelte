@@ -1,7 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { iconType, modalState } from "$lib/stores/index";
-  import { currentUser, pb } from "@packages/api/src/context";
+  import { iconType, modalState, currentUser } from "$lib/stores/index";
+  import { pb } from "@packages/api/src/context";
 
   let user = {
     email: "",
@@ -10,9 +10,16 @@
 
   const signIn = async () => {
     try {
-      const authData = await pb.collection("users").authWithPassword(user.email, user.password);
+      const authData = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }).then(res => res.json());
 
-      if (authData) {
+      if (authData.token) {
+        $currentUser = { ...user, model: authData.record };
         $modalState = {
           title: "Log in Successful",
           msg: "You have successfully logged in.",
@@ -34,12 +41,12 @@
         };
       }
     } catch (error: any) {
-      let errors = Object.entries(error.data.data);
-      console.log(errors);
+      // let errors = Object.entries(error.data.data);
+      console.log(error);
 
       $modalState = {
         title: error.message,
-        msg: errors[0] || "Invalid credentials.",
+        msg: error || "Invalid credentials.",
         buttons: [
           {
             text: "OK",

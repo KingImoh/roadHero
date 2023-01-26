@@ -1,7 +1,8 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { iconType, modalState } from "$lib/stores";
-  import { currentUser, pb } from "@packages/api/src/context";
+  import { currentUser } from "$lib/stores";
+  import { pb } from "@packages/api/src/context";
   import { onMount } from "svelte";
 
   const cities = [
@@ -48,11 +49,12 @@
       mapboxsearch.autofill({
         accessToken:
           "pk.eyJ1Ijoia2luZ2ltb2giLCJhIjoiY2xhdjVmNWIwMDJnazNxc2o3aW14bHJseCJ9._HBlCjjOJ5fD-y6OoRqI0Q",
-        options: { country: "NG" },
       });
     };
   });
 </script>
+
+<!-- a reporting page with support for video and description -->
 
 <div id="body" />
 <divi class="p-6 flex space-x-2 items-center bg-primary-blue text-white">
@@ -66,21 +68,25 @@
 <div class="p-6">
   <div class="">Report location</div>
   <div class="py-3 space-y-5">
-    <select name="city" id="city" class="w-full p-4 rounded-lg bg-gray-200 border-3 outline-none" a>
+    <input
+      type="text"
+      class="w-full bg-gray-200 p-4 rounded-lg outline-none"
+      placeholder="Address"
+      required
+      autocomplete="street-address"
+    />
+
+    <select
+      name="city"
+      id="city"
+      class="w-full p-4 rounded-lg bg-gray-200 border-3 outline-none"
+      autocomplete="address-level2"
+    >
       <option selected>Select your City</option>
       {#each cities as city}
         <option value={city.id}>{city.name}</option>
       {/each}
     </select>
-    <form>
-      <input
-        type="text"
-        class="w-full bg-gray-200 p-4 rounded-lg outline-none"
-        placeholder="Address"
-        required
-        autocomplete="street-address"
-      />
-    </form>
   </div>
 
   <div class="py-3">

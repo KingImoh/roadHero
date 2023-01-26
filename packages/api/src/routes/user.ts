@@ -1,4 +1,4 @@
-import { publicProcedure, router } from "..";
+import { protectedProcedure, publicProcedure, router } from "../trpc";
 import { object, string } from "zod";
 
 export default router({
@@ -19,4 +19,8 @@ export default router({
     .mutation(({ input, ctx }) => {
       ctx.user;
     }),
+
+  test: protectedProcedure.query(({ ctx }) => {
+    return ctx.user;
+  }),
 });

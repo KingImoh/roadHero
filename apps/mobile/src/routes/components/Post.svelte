@@ -13,10 +13,11 @@
   import clsx from "clsx";
   import type { BaseModel, Record } from "pocketbase";
   import { onMount } from "svelte";
-  import { currentUser, pb } from "@packages/api/src/context";
+  import { currentUser } from "$lib/stores";
   import { goto } from "$app/navigation";
   import dayjs from "dayjs";
   import relativeTime from "dayjs/plugin/relativeTime";
+  import { pb } from "@packages/api/src/context";
   // import user from "@packages/api/src/router/routes/user";
   pb.autoCancellation(false);
   dayjs.extend(relativeTime);

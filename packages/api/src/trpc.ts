@@ -1,5 +1,4 @@
-import type { Context } from "../context";
-import user from "./routes/user";
+import type { Context } from "./context";
 import { initTRPC, TRPCError } from "@trpc/server";
 
 const t = initTRPC.context<Context>().create();
@@ -8,11 +7,8 @@ export const middleware = t.middleware;
 export const router = t.router;
 export const publicProcedure = t.procedure;
 
-export const appRouter = router({
-  user,
-});
-
 const isAuthed = middleware(({ next, ctx }) => {
+  console.log("(hooks)ctx.req.headers.cookie:", ctx.req.headers.cookie);
   ctx.pb.authStore.loadFromCookie(ctx.req.headers.cookie || "");
   console.log("(hooks)authStoreValid:", ctx.pb.authStore.isValid);
 
@@ -30,5 +26,3 @@ const isAuthed = middleware(({ next, ctx }) => {
 });
 
 export const protectedProcedure = t.procedure.use(isAuthed);
-
-export type AppRouter = typeof appRouter;

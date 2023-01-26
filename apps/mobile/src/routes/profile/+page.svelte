@@ -1,11 +1,12 @@
 <script lang="ts">
-  import roadheroLogo from "$lib/assets/img/roadheroLogo.png";
   import profilePicture from "$lib/assets/img/profile.jpg";
-  import { iconType, modalState } from "$lib/stores";
-  import { goto } from "$app/navigation";
-  import { currentUser, pb } from "@packages/api/src/context";
-  import { onMount } from "svelte";
+  import roadheroLogo from "$lib/assets/img/roadheroLogo.png";
   import type { BaseModel, Record } from "pocketbase";
+  import { currentUser } from "$lib/stores";
+  import { goto } from "$app/navigation";
+  import { iconType, modalState } from "$lib/stores";
+  import { onMount } from "svelte";
+  import { pb } from "@packages/api/src/context";
   // import badRoad from "$lib/assets/img/bad-roads.jpeg";
   // import RoadHeroLogo from "../components/RoadHeroLogo.svelte";
   // import { onDestroy, onMount } from "svelte";
@@ -107,7 +108,7 @@
   />
 
   <div class="pt7 pb-2 text-xl max-w-80 flex items-center space-x-2xl">
-    {$currentUser?.username}
+    {$currentUser?.model.username}
     <!-- svelte-ignore a11y-img-redundant-alt -->
     <img
       src={roadheroLogo}

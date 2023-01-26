@@ -5,13 +5,13 @@ import { appRouter } from "./router";
 import { createContext, pb } from "./context";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
 import { object, string } from "zod";
-import { ClientResponseError } from "pocketbase";
+// import { ClientResponseError } from "pocketbase";
 
 const app = fastify({ maxParamLength: 5000 });
 
 app.register(cors, {
-  origin: "http://localhost:5173",
-  credentials: true,
+  origin: "*",
+  // credentials: true,
 });
 
 app.register(cookie, {
@@ -25,8 +25,7 @@ app.register(fastifyTRPCPlugin, {
 });
 
 app.post("/signup", async (req, reply) => {
-  const { fullname, username, email, password, passwordConfirm } = req.body as {
-    fullname: string;
+  const { username, email, password, passwordConfirm } = req.body as {
     username: string;
     email: string;
     password: string;
@@ -34,7 +33,6 @@ app.post("/signup", async (req, reply) => {
   };
 
   const UserRegisterSchema = object({
-    fullname: string(),
     username: string(),
     email: string().email({ message: "This is not an email dawg" }),
     password: string().min(4),
@@ -43,7 +41,6 @@ app.post("/signup", async (req, reply) => {
 
   try {
     UserRegisterSchema.parse({
-      fullname,
       username,
       email,
       password,
@@ -54,7 +51,6 @@ app.post("/signup", async (req, reply) => {
       email,
       password,
       passwordConfirm,
-      fullname,
       username,
     });
 
@@ -63,7 +59,8 @@ app.post("/signup", async (req, reply) => {
     // await pb.collection("profiles").update(user.profile.id, {
     // });
 
-    await pb.collection("users").authWithPassword(email, password);
+    const data = await pb.collection("users").authWithPassword(email, password);
+    reply.send(data);
   } catch (e) {
     // if (e instanceof ClientResponseError) {
     //   if (e.data.username.code === "validation_not_unique") {
@@ -74,6 +71,8 @@ app.post("/signup", async (req, reply) => {
     // } else {
     //   throw error(401, "Unknown error occured");
     // }
+
+    reply.send({ ...e });
   }
 
   // pb.authStore.loadFromCookie(req.headers.cookie || "");
@@ -86,6 +85,42 @@ app.post("/signup", async (req, reply) => {
   // reply.send(parsedPBAuthCookie);
 });
 
+app.get("/test", async (req, reply) => {
+  console.log("headers.cookie:", req.headers.cookie);
+  pb.authStore.loadFromCookie(req.headers.cookie || "");
+  await pb.collection("users").authRefresh();
+  console.log(pb.authStore.model);
+  // console.log("(hooks)authStoreValid:", pb.authStore.isValid);
+  reply.send({ pbAuthCookie: pb.authStore.exportToCookie() });
+});
+
+app.post("/login", async (req, reply) => {
+  const { email, password } = req.body as {
+    email: string;
+    password: string;
+  };
+
+  const UserLoginSchema = object({
+    email: string().email({ message: "This is not an email dawg" }),
+    password: string().min(4),
+  });
+
+  try {
+    UserLoginSchema.parse({
+      email,
+      password,
+    });
+
+    const { token, record } = await pb.collection("users").authWithPassword(email, password);
+
+    reply
+      .setCookie("pb_auth", pb.authStore.exportToCookie().slice(14))
+      .send({ record, token, cookie: pb.authStore.exportToCookie() });
+  } catch (e) {
+    reply.send({ ...e });
+  }
+});
+
 function parseCookieString(cookie: string) {
   return cookie.split(";").reduce((acc, c) => {
     const [key, v] = c.split("=");
@@ -94,9 +129,38 @@ function parseCookieString(cookie: string) {
   }, {} as Record<string, string>);
 }
 
+import os from "os";
+
+const ifaces = os.networkInterfaces();
+let wifiIp: string;
+
+Object.keys(ifaces).forEach(function (ifname) {
+  ifaces[ifname].forEach(function (iface) {
+    if ("IPv4" !== iface.family || iface.internal !== false) {
+      // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+      return;
+    }
+    if (ifname.startsWith("Wi-Fi") || ifname.startsWith("wlan")) {
+      wifiIp = iface.address;
+      console.log(`Wi-Fi IP: ${wifiIp}`);
+    }
+  });
+});
+
 (async () => {
   try {
-    await app.listen({ port: 5000 });
+    app.listen(
+      {
+        port: 5000,
+      },
+      (err, address) => {
+        if (err) {
+          console.error(err);
+          process.exit(1);
+        }
+        console.log(`server listening on ${address})`);
+      }
+    );
   } catch (err) {
     app.log.error(err);
     process.exit(1);

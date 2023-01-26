@@ -8,6 +8,7 @@
   import { pb } from "@packages/api/src/context";
   import { onMount } from "svelte";
   import welcome from "$lib/assets/img/welcome-3.png";
+  import { trpc } from "$lib/trpc";
   // let header: Element;
   // let headerCollides: boolean;
 
@@ -24,14 +25,9 @@
   let posts: any[] = [];
 
   onMount(async () => {
-    try {
-      const reports = await pb.collection("reports").getList(1, 10, {
-        filter: 'created >= "2022-01-01 00:00:00"',
-      });
-      posts = reports.items;
-    } catch (error) {
-      console.log(error);
-    }
+    const resultList = await trpc.reports.get.query();
+    console.log({ resultList });
+    posts = resultList.items;
   });
 
   let selected = false;

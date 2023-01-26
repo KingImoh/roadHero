@@ -9,27 +9,16 @@
   import Modal from "./components/Modal.svelte";
   import { modalState } from "$lib/stores";
   import { goto } from "$app/navigation";
-  import { currentUser } from "@packages/api/src/context";
+  import { currentUser } from "$lib/stores";
   import { page } from "$app/stores";
 
   // import Welcome from "./components/Welcome.svelte";
   let footerHeight = 0;
 
-  if (!$currentUser) {
+  // $: console.log($currentUser);
+  $: if ($currentUser === null) {
     goto("/welcome");
   }
-
-  // if user is logged in
-  // remain in current page
-  // else
-  // redirect to onboarding page
-  // goto("/onboarding");
-
-  // if (!user) {
-  //   goto("/onboarding")
-  // }
-
-  // https://capacitorjs.com/docs/apis/cookies
 </script>
 
 <div

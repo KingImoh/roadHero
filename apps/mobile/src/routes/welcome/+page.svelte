@@ -11,12 +11,20 @@
   // Import Swiper styles
   import "swiper/css";
   import "swiper/css/pagination";
+  import { trpc } from "$lib/trpc";
+
+  async function handleClick() {
+    const d = await trpc.user.test.query();
+    console.log(d);
+  }
 </script>
 
 <div class="flex flex-col items-center p-10 space-y-35 h-screen bg-primaryBlue">
   <div class="w-200px mt-20">
     <img src={rhlogo} alt="" />
   </div>
+
+  <!-- <button class=" bg-pink text-white p-5 " on:click={handleClick}>Click meh</button> -->
 
   <div w-full>
     <Swiper

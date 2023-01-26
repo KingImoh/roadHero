@@ -1,6 +1,6 @@
-import { Preferences } from "@capacitor/preferences";
 import { writable } from "svelte/store";
 import { capacitorStorageStore } from "./capacitor-storage";
+import type { Record } from "pocketbase";
 
 export const navigationStack = capacitorStorageStore("history-length", window.history.length);
 
@@ -13,15 +13,14 @@ export enum iconType {
 
 export const modalState = writable({
   title: "",
-  msg: "" as any,
+  msg: "",
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   buttons: [{ text: "", handler: () => {} }],
   icon: "",
-} as any);
+});
 
-const { value } = (await Preferences.get({ key: "RoadheroSearchHistory" })) || {};
-
-// export const searchHistory = writable(value ?? []);
-export const searchHistory = writable(value ? JSON.parse(value) : []);
-
-if (!value) await Preferences.set({ key: "RoadheroSearchHistory", value: JSON.stringify([]) });
+export const currentUser = capacitorStorageStore<{
+  email: string;
+  password: string;
+  model: Record;
+}>("creds", null!);

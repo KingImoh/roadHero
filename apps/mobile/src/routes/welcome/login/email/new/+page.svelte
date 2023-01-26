@@ -55,7 +55,7 @@
           {
             text: "Continue",
             handler: () => {
-              $modalState = "";
+              $modalState.title = "";
             },
           },
         ],
