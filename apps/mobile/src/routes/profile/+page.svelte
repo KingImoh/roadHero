@@ -1,47 +1,22 @@
 <script lang="ts">
   import profilePicture from "$lib/assets/img/profile.jpg";
   import roadheroLogo from "$lib/assets/img/roadheroLogo.png";
-  import type { BaseModel, Record } from "pocketbase";
   import { currentUser } from "$lib/stores";
   import { goto } from "$app/navigation";
   import { iconType, modalState } from "$lib/stores";
   import { onMount } from "svelte";
-  import { pb } from "@packages/api/src/context";
-  // import badRoad from "$lib/assets/img/bad-roads.jpeg";
-  // import RoadHeroLogo from "../components/RoadHeroLogo.svelte";
-  // import { onDestroy, onMount } from "svelte";
-  // import { isCollide } from "$lib/utils";
-  // import clsx from "clsx";
+  import { pb } from "$lib/stores/pocketbase";
 
-  // let header: Element;
-  // let headerCollides: boolean;
-  // let showNotifModal = false;
-
-  // // using the "#app" div instead of "body" because overflow is set to hidden on the body
-  // // therefore the scroll event has no effect on the body, but works on "#app"
-  // onMount(() => document.querySelector("#app")!.addEventListener("scroll", handleScroll));
-
-  // onDestroy(() => document.querySelector("#app")!.removeEventListener("scroll", handleScroll));
-
-  // function handleScroll() {
-  //   if (!header) return;
-  //   headerCollides = isCollide(header, document.querySelector("#container")!);
-  // }
-  let user: Record;
-  let id = $currentUser?.id as string;
   let avatar: string;
-  console.log(id);
 
   onMount(async () => {
-    const user = await pb.collection("users").getOne(id);
-
-    avatar = pb.getFileUrl(user, user?.avatar);
-    console.log(user, avatar);
+    avatar = pb.getFileUrl($currentUser?.model!, $currentUser?.model.avatar);
+    console.log($currentUser, avatar);
   });
 
   const signOut = () => {
     // "logout" the last authenticated model
-    pb.authStore.clear();
+    $currentUser = null;
     goto("/welcome");
 
     $modalState = {

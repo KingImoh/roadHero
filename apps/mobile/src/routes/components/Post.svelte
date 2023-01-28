@@ -18,24 +18,20 @@
   import dayjs from "dayjs";
   import relativeTime from "dayjs/plugin/relativeTime";
   import { pb } from "@packages/api/src/context";
-  // import user from "@packages/api/src/router/routes/user";
+  import { trpc } from "$lib/trpc";
   pb.autoCancellation(false);
   dayjs.extend(relativeTime);
-  // type Report = {
-  //   description: string;
-  //   media: string[];
-  //   comments: string[];
-  //   upvotes: number;
-  //   username: string;
-  //   location: string;
-  //   created: string;
-  // };
 
   export let reportId: string;
   let liked = false;
   let commenting = false;
   let comment = "";
   let avatar: string;
+  let user = {
+    username: "",
+    avatar: "",
+  };
+
   let report = {
     description: "",
     media: [],
@@ -46,47 +42,43 @@
     created: "",
     user: "",
     expand: {
-      user: {
-        username: "",
-        avatar: "",
-      },
+      user: user,
       comments: {},
     },
-  };
-
-  // let report = {
-  //   description: "",
-  //   media: [],
-  //   comments: [],
-  //   upvotes: 0,
-  //   username: "",
-  //   location: "",
-  //   created: "",
-  // };
-  // type ReportRecord = Record & Report;
+  } as unknown as Record;
 
   function getFileUrl(media: string) {
     let url = pb.getFileUrl(report as unknown as Record, media);
-    // console.log("url", url);
 
     return url;
-    // return pb.getFileUrl(report as ReportRecord, media);
   }
-
-  // const cr = (record: Report) => record as ReportRecord;
+  const makeComment = async () => {
+    const res = await trpc.comments.add.mutate({
+      user: $currentUser?.model.id!,
+      report: reportId,
+      upvotes: {},
+      content: comment,
+    });
+    comment = "";
+    commenting = false;
+  };
 
   onMount(async () => {
     // report = await pb.collection("reports").getOne<Report>(reportId, { expand: "user" });
-    report = await pb.collection("reports").getOne(reportId, { expand: "user, comments" });
-    const user = await pb.collection("users").getOne(report?.user);
-    avatar = pb.getFileUrl(user, user?.avatar);
 
-    const comments = await pb
-      .collection("comments")
-      .getFullList(undefined, { filter: `report= "${reportId}"` });
-    console.log("avatar", avatar);
-    console.log("report", report);
-    console.log("comments", comments.length);
+    report = (await trpc.reports.getOne.query({
+      id: reportId,
+    })) as unknown as Record;
+
+    // pb.collection("reports").getOne(reportId, { expand: "user, comments" });
+
+    user = await pb.collection("users").getOne(report?.user);
+
+    // user = (await trpc.user.get.query({ id: report?.user })) as unknown as Record;
+
+    avatar = pb.getFileUrl(user as unknown as Record, user?.avatar);
+
+    const comments = await trpc.comments.get.query(reportId);
     commentsLen = comments.length;
   });
   let commentsLen: number;
@@ -102,7 +94,7 @@
     />
 
     <div class="mx-3">
-      <div class="">{report.expand?.user?.username}</div>
+      <div class="">{user?.username}</div>
       <div class="text-sm flex items-center text-secondaryGreen ">
         <div class="i-material-symbols-location-on-rounded inline-flex mr-1" />
         {report.location}
@@ -231,23 +223,7 @@
         class="square-30px rounded-full bg-secondaryGreen flex justify-center items-center text-white"
       >
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div
-          class="i-mingcute-send-plane-line"
-          on:click={async () => {
-            try {
-              const record = await pb.collection("comments").create({
-                user: $currentUser?.id,
-                report: reportId,
-                upvotes: {},
-                content: comment,
-              });
-              comment = "";
-            } catch (error) {
-              console.log("error", error);
-              return { error: true };
-            }
-          }}
-        />
+        <div class="i-mingcute-send-plane-line" on:click={makeComment} />
       </div>
     </div>
   {/if}

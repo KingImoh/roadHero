@@ -85,7 +85,7 @@
       }
 
       function onSuccess(position: GeolocationPosition) {
-        let supposedCurrentPos: Coordinates = [position.coords.longitude, position.coords.latitude];
+        let supposedCurrentPos: Coordinates = [position.coords.latitude, position.coords.longitude];
         setupMap(supposedCurrentPos);
       }
 
@@ -97,6 +97,7 @@
 
       function setupMap(center: Coordinates) {
         currentPos = center;
+        console.log("currentPos", currentPos);
 
         map = new Map({
           container: "map",
@@ -109,7 +110,10 @@
 
         // Add zoom and rotation controls to the map.
         // @ts-ignore
-        map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
+        // map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
+        //Add move to current location button
+        // @ts-ignore
+        // map.addControl(new mapboxgl.GeolocateControl());
 
         map.on("load", () => {
           // make an initial directions request that

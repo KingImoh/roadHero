@@ -18,7 +18,7 @@ export function capacitorStorageStore<T>(key: string, initial: T): WritableCapac
 
   /** Set both the LocalStorage and this Svelte store */
   const setSync = async (value: T) => {
-    console.log("setSync", value);
+    // console.log("setSync", value);
     setStore(value);
     await Preferences.set({ key, value: JSON.stringify(value) });
   };

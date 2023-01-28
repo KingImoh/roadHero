@@ -27,12 +27,7 @@
             {
               text: "Continue",
               handler: () => {
-                $modalState = {
-                  title: "",
-                  msg: "",
-                  buttons: [],
-                  icon: "",
-                };
+                $modalState.title = "";
                 goto("/");
               },
             },
@@ -51,12 +46,7 @@
           {
             text: "OK",
             handler: () => {
-              $modalState = {
-                title: "",
-                msg: "",
-                buttons: [],
-                icon: "",
-              };
+              $modalState.title = "";
             },
           },
         ],
@@ -73,12 +63,7 @@
           {
             text: "OK",
             handler: () => {
-              $modalState = {
-                title: "",
-                msg: "",
-                buttons: [],
-                icon: "",
-              };
+              $modalState.title = "";
             },
           },
         ],

@@ -1,9 +1,17 @@
 <script lang="ts">
   import "mapbox-gl/dist/mapbox-gl.css";
-  import mapboxgl, { Map, GeoJSONSource, type LngLatLike, Marker } from "mapbox-gl";
+  import mapboxgl, {
+    Map,
+    GeoJSONSource,
+    type LngLatLike,
+    Marker,
+    type MarkerOptions,
+  } from "mapbox-gl";
   import { onMount } from "svelte";
   import MapSearch from "./MapSearch.svelte";
   import { modalState } from "$lib/stores";
+  import { trpc } from "$lib/trpc";
+  import type { Record } from "pocketbase";
 
   type Coordinates = [number, number];
 
@@ -11,7 +19,9 @@
   let currentPos: Coordinates = [0, 0];
   let map: Map;
 
-  const addMarker = (map: Map, location: LngLatLike) => new Marker().setLngLat(location).addTo(map);
+  const addMarker = (map: Map, location: LngLatLike, options?: MarkerOptions) => {
+    new Marker(options).setLngLat(location).addTo(map);
+  };
 
   // create a function to make a directions request
   async function getRoute(end: Coordinates) {
@@ -83,8 +93,9 @@
         setupMap(bazeUniversity);
       }
 
-      function setupMap(center: Coordinates) {
+      async function setupMap(center: Coordinates) {
         currentPos = center;
+        const reportLocations = (await trpc.reports.locations.query()) as unknown as Record;
 
         map = new Map({
           container: "map",
@@ -98,10 +109,10 @@
         // Add zoom and rotation controls to the map.
         map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
 
-        map.on("load", () => {
+        map.on("load", async () => {
           // make an initial directions request that
           // starts and ends at the same location
-          getRoute(currentPos);
+          await getRoute(currentPos);
           mapPresent = true;
 
           // Add starting point to the map
@@ -129,6 +140,27 @@
               "circle-color": "#3887be",
             },
           });
+
+          reportLocations.items.forEach(async (location: { coords: any }) => {
+            // getRoute(location.coords.value);
+            addMarker(map, location.coords.value, {
+              color: "#FF0000",
+            });
+
+            // map.fitBounds([location.coords.values, currentPos], {
+            //   padding: 60,
+            // });
+          });
+
+          map.on("click", async e => {
+            const coordsObj = e.lngLat;
+            const coords = Object.values(coordsObj) as Coordinates;
+            // console.log(coords);
+            // make a directions request from the current location to the clicked location
+            // await getRoute(coords);
+            // add a marker to the clicked location
+            // addMarker(map, coords);
+          });
         });
       }
     } catch (error) {
@@ -143,10 +175,10 @@
       <div class="square-full text-center">Loading map</div>
     {/if}
   </div>
+  <!-- <MapSearch /> -->
 </div>
-<MapSearch />
 
-<!-- <absolute-bottom-right>
+<!-- <absolute-bottom-right>o
   <button
     class="btn btn-primary"
     on:click={() => {

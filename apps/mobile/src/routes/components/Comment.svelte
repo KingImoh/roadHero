@@ -6,6 +6,7 @@
   import { onMount } from "svelte";
   import dayjs from "dayjs";
   import relativeTime from "dayjs/plugin/relativeTime";
+  import { trpc } from "$lib/trpc";
 
   dayjs.extend(relativeTime);
   pb.autoCancellation(false);
@@ -26,9 +27,13 @@
   };
   let url: string;
   onMount(async () => {
-    comment = await pb.collection("comments").getOne(commentId, {
+    comment = (await trpc.comments.getOne.query({
+      id: commentId,
       expand: "user",
-    });
+    })) as unknown as Record;
+    // pb.collection("comments").getOne(commentId, {
+    //   expand: "user",
+    // });
     const user = await pb.collection("users").getOne(comment?.user as string);
 
     url = pb.getFileUrl(user, comment.expand?.user?.avatar);

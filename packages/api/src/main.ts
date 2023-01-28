@@ -1,10 +1,12 @@
 import cors from "@fastify/cors";
 import fastify from "fastify";
 import cookie from "@fastify/cookie";
+import multipart from "@fastify/multipart";
+import formbody from "@fastify/formbody";
 import { appRouter } from "./router";
 import { createContext, pb } from "./context";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
-import { object, string } from "zod";
+import { any, array, number, object, string } from "zod";
 // import { ClientResponseError } from "pocketbase";
 
 const app = fastify({ maxParamLength: 5000 });
@@ -18,6 +20,9 @@ app.register(cookie, {
   secret: "my-secret", // for cookies signature
   parseOptions: {}, // options for parsing cookies
 });
+
+app.register(multipart);
+app.register(formbody);
 
 app.register(fastifyTRPCPlugin, {
   prefix: "/trpc",
@@ -34,7 +39,7 @@ app.post("/signup", async (req, reply) => {
 
   const UserRegisterSchema = object({
     username: string(),
-    email: string().email({ message: "This is not an email dawg" }),
+    email: string().email({ message: "This is not an email, Hero!" }),
     password: string().min(4),
     passwordConfirm: string().min(4),
   });
@@ -94,6 +99,20 @@ app.get("/test", async (req, reply) => {
   reply.send({ pbAuthCookie: pb.authStore.exportToCookie() });
 });
 
+// :fix: muiltipart form data issues
+app.post("/updateReport", async (req, reply) => {
+  const id = new URLSearchParams(req.url.slice(14)).get("id") as string;
+  const data = await req.file();
+  // const formData = await data.toBuffer();
+  console.log("req b ody:", id);
+  try {
+    // const report = await pb.collection("reports").update(id, formData);
+    // reply.send(report);
+  } catch (e) {
+    console.log(e);
+  }
+});
+
 app.post("/login", async (req, reply) => {
   const { email, password } = req.body as {
     email: string;
@@ -135,7 +154,7 @@ const ifaces = os.networkInterfaces();
 let wifiIp: string;
 
 Object.keys(ifaces).forEach(function (ifname) {
-  ifaces[ifname].forEach(function (iface) {
+  ifaces[ifname]?.forEach(function (iface) {
     if ("IPv4" !== iface.family || iface.internal !== false) {
       // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
       return;

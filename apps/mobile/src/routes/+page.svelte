@@ -1,32 +1,17 @@
 <script lang="ts">
   import Search from "./components/Searchbar.svelte";
-  // import { onDestroy, onMount } from "svelte";
-  // import { isCollide } from "$lib/utils";
   import clsx from "clsx";
   import Post from "./components/Post.svelte";
   import { get } from "svelte/store";
-  import { pb } from "@packages/api/src/context";
   import { onMount } from "svelte";
   import welcome from "$lib/assets/img/welcome-3.png";
   import { trpc } from "$lib/trpc";
-  // let header: Element;
-  // let headerCollides: boolean;
 
-  // // using the "#app" div instead of "body" because overflow is set to hidden on the body
-  // // therefore the scroll event has no effect on the body, but works on "#app"
-  // onMount(() => document.querySelector("#app")!.addEventListener("scroll", handleScroll));
-
-  // onDestroy(() => document.querySelector("#app")!.removeEventListener("scroll", handleScroll));
-
-  // function handleScroll() {
-  //   if (!header) return;
-  //   headerCollides = isCollide(header, document.querySelector("#container")!);
-  // }
   let posts: any[] = [];
 
   onMount(async () => {
     const resultList = await trpc.reports.get.query();
-    console.log({ resultList });
+    // console.log({ resultList });
     posts = resultList.items;
   });
 

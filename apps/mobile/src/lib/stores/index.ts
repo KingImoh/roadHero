@@ -23,4 +23,4 @@ export const currentUser = capacitorStorageStore<{
   email: string;
   password: string;
   model: Record;
-}>("creds", null!);
+} | null>("creds", null);
