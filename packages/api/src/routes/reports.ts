@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure, router } from "../trpc";
+import { publicProcedure, router } from "../trpc";
 import { array, number, object, string } from "zod";
 
 export default router({
@@ -39,14 +39,25 @@ export default router({
       console.log(ctx.pb.authStore.isValid);
 
       const loc = await ctx.pb.collection("locations").create({ coords, reporter: input.user.id });
-      return await ctx.pb
-        .collection("reports")
-        .create({ ...rep, location: loc.id, user: input.user.id });
+      return await ctx.pb.collection("reports").create({
+        ...rep,
+        location: loc.id,
+        user: input.user.id,
+        upvotes: {
+          value: [],
+        },
+      });
     }),
 
   locations: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.pb.collection("locations").getList(1, 10, {
-      filter: 'created >= "2022-01-01 00:00:00"',
-    });
+    return await ctx.pb.collection("locations").getList(1, 10);
   }),
+
+  like: publicProcedure
+    .input(object({ id: string(), likers: array(string()) }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.pb.collection("reports").update(input.id, {
+        upvotes: { value: input.likers },
+      });
+    }),
 });

@@ -6,7 +6,9 @@
   import { onMount } from "svelte";
   import welcome from "$lib/assets/img/welcome-3.png";
   import { trpc } from "$lib/trpc";
+  import { pb } from "$lib/stores/pocketbase";
 
+  pb.autoCancellation(false);
   let posts: any[] = [];
 
   onMount(async () => {
@@ -41,8 +43,8 @@
     </div>
 
     <div class="flex items-center overflow-auto mb-4 ml-4 space-x-2 shadow-inner p-1 rounded-full">
-      {#each [...Array(5)] as element}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- {#each [...Array(5)] as element}
+        svelte-ignore a11y-click-events-have-key-events
         <div
           class="flex border-primaryBlue rounded-full border w-fit p-2 text-xs space-x-1"
           on:click={() => {
@@ -52,7 +54,7 @@
           <div>Potholes</div>
           <div class={selected ? "i-carbon-subtract" : "i-material-symbols-add"} />
         </div>
-      {/each}
+      {/each} -->
     </div>
   </div>
 

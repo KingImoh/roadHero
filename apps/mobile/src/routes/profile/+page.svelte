@@ -1,5 +1,4 @@
 <script lang="ts">
-  import profilePicture from "$lib/assets/img/profile.jpg";
   import roadheroLogo from "$lib/assets/img/roadheroLogo.png";
   import { currentUser } from "$lib/stores";
   import { goto } from "$app/navigation";
@@ -11,7 +10,6 @@
 
   onMount(async () => {
     avatar = pb.getFileUrl($currentUser?.model!, $currentUser?.model.avatar);
-    console.log($currentUser, avatar);
   });
 
   const signOut = () => {
@@ -27,12 +25,7 @@
         {
           text: "OK",
           handler: () => {
-            $modalState = {
-              title: "",
-              msg: "",
-              icon: "",
-              buttons: [],
-            };
+            $modalState.title = "";
           },
         },
       ],
@@ -102,7 +95,27 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center space-y-10 p-4 pt-15">
+<div class="flex flex-col items-center space-y-7 p-4 pt-15">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div
+    on:click={() => {
+      $modalState.title = "Coming Soon";
+      $modalState.msg = "This feature is coming soon";
+      $modalState.icon = iconType.info;
+      $modalState.buttons = [
+        {
+          text: "OK",
+          handler: () => {
+            $modalState.title = "";
+          },
+        },
+      ];
+    }}
+    class="w-85% shadow rounded-lg h-65px flex items-center bg-white"
+  >
+    <div class="i-material-symbols-featured-play-list-outline-rounded mx-4 w-15%" />
+    <div class="fw300">My Reports</div>
+  </div>
   <div class="w-85% shadow rounded-lg h-65px flex items-center bg-white">
     <div class="i-ion-settings-outline mx-4 w-15%" />
     <div class="fw300">Settings</div>

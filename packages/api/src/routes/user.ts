@@ -3,9 +3,11 @@ import { object, string } from "zod";
 
 export default router({
   get: publicProcedure.input(object({ id: string() })).query(async ({ ctx, input }) => {
-    console.log("user", input.id);
+    // console.log("user", input.id);
+    const user = await ctx.pb.collection("users").getOne(input.id);
+    console.log("user", user);
 
-    return await ctx.pb.collection("users").getOne(input.id);
+    return user;
   }),
 
   add: publicProcedure

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { iconType, modalState, currentUser } from "$lib/stores/index";
+  import { base_url } from "$lib/utils";
   import { pb } from "@packages/api/src/context";
 
   let user = {

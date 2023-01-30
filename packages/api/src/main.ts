@@ -6,7 +6,7 @@ import formbody from "@fastify/formbody";
 import { appRouter } from "./router";
 import { createContext, pb } from "./context";
 import { fastifyTRPCPlugin } from "@trpc/server/adapters/fastify";
-import { any, array, number, object, string } from "zod";
+import { object, string } from "zod";
 // import { ClientResponseError } from "pocketbase";
 
 const app = fastify({ maxParamLength: 5000 });
@@ -59,13 +59,16 @@ app.post("/signup", async (req, reply) => {
       username,
     });
 
-    console.dir({ user }, { depth: 10 });
-
-    // await pb.collection("profiles").update(user.profile.id, {
-    // });
-
-    const data = await pb.collection("users").authWithPassword(email, password);
-    reply.send(data);
+    // console.dir({ user }, { depth: 10 });
+    const { token, record } = await pb.collection("users").create({
+      email,
+      password,
+      passwordConfirm,
+      username,
+    });
+    reply
+      .setCookie("pb_auth", pb.authStore.exportToCookie().slice(14))
+      .send({ record, token, cookie: pb.authStore.exportToCookie() });
   } catch (e) {
     // if (e instanceof ClientResponseError) {
     //   if (e.data.username.code === "validation_not_unique") {
@@ -78,38 +81,6 @@ app.post("/signup", async (req, reply) => {
     // }
 
     reply.send({ ...e });
-  }
-
-  // pb.authStore.loadFromCookie(req.headers.cookie || "");
-  // console.log("(hooks)authStoreValid:", pb.authStore.isValid);
-
-  // const pbAuthCookie = pb.authStore.exportToCookie();
-  // const parsedPBAuthCookie = parseCookieString(pbAuthCookie);
-
-  // reply.header("set-cookie", pbAuthCookie);
-  // reply.send(parsedPBAuthCookie);
-});
-
-app.get("/test", async (req, reply) => {
-  console.log("headers.cookie:", req.headers.cookie);
-  pb.authStore.loadFromCookie(req.headers.cookie || "");
-  await pb.collection("users").authRefresh();
-  console.log(pb.authStore.model);
-  // console.log("(hooks)authStoreValid:", pb.authStore.isValid);
-  reply.send({ pbAuthCookie: pb.authStore.exportToCookie() });
-});
-
-// :fix: muiltipart form data issues
-app.post("/updateReport", async (req, reply) => {
-  const id = new URLSearchParams(req.url.slice(14)).get("id") as string;
-  const data = await req.file();
-  // const formData = await data.toBuffer();
-  console.log("req b ody:", id);
-  try {
-    // const report = await pb.collection("reports").update(id, formData);
-    // reply.send(report);
-  } catch (e) {
-    console.log(e);
   }
 });
 
@@ -139,6 +110,29 @@ app.post("/login", async (req, reply) => {
     reply.send({ ...e });
   }
 });
+
+app.get("/test", async (req, reply) => {
+  console.log("headers.cookie:", req.headers.cookie);
+  pb.authStore.loadFromCookie(req.headers.cookie || "");
+  await pb.collection("users").authRefresh();
+  console.log(pb.authStore.model);
+  // console.log("(hooks)authStoreValid:", pb.authStore.isValid);
+  reply.send({ pbAuthCookie: pb.authStore.exportToCookie() });
+});
+
+// // :fix: muiltipart form data issues
+// app.post("/updateReport", async (req, reply) => {
+//   const id = new URLSearchParams(req.url.slice(14)).get("id") as string;
+//   const data = await req.file();
+//   // const formData = await data.toBuffer();
+//   console.log("req b ody:", id);
+//   try {
+//     // const report = await pb.collection("reports").update(id, formData);
+//     // reply.send(report);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// });
 
 function parseCookieString(cookie: string) {
   return cookie.split(";").reduce((acc, c) => {

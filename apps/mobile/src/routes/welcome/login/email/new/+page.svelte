@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { modalState, iconType } from "$lib/stores/index";
+  import { modalState, iconType, currentUser } from "$lib/stores/index";
+  import { base_url } from "$lib/utils";
   import { pb } from "@packages/api/src/context";
 
   let files: any;
@@ -14,9 +15,17 @@
 
   const signup = async () => {
     try {
-      const createUser = await pb.collection("users").create(user);
-      console.log(createUser);
-      if (createUser) {
+      const authData = await fetch(base_url + "/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }).then(res => res.json());
+
+      if (authData.token) {
+        $currentUser = { ...user, model: authData.record };
+
         $modalState = {
           title: "Sign Up Successful",
           msg: `You have successfully signed up.`,
@@ -37,7 +46,7 @@
         };
         // const verificationEmail = await pb.collection("users").requestVerification(user.email);
         // goto("/welcome/login/email/verify");
-        goto("/welcome/login/email");
+        goto("/");
       }
     } catch (error: any) {
       // let errors: [string, string][] = Object.entries(error.data.data);

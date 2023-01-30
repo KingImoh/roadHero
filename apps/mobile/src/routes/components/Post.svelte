@@ -1,6 +1,4 @@
 <script script lang="ts">
-  import badRoad from "$lib/assets/img/bad-roads.jpeg";
-
   // import Swiper core and required modules
   import { Navigation, Pagination, Scrollbar } from "swiper";
   import { Swiper, SwiperSlide } from "swiper/svelte";
@@ -12,21 +10,28 @@
   import "swiper/css/scrollbar";
   import clsx from "clsx";
   import type { BaseModel, Record } from "pocketbase";
-  import { onMount } from "svelte";
+  import { onDestroy, onMount } from "svelte";
   import { currentUser } from "$lib/stores";
   import { goto } from "$app/navigation";
   import dayjs from "dayjs";
   import relativeTime from "dayjs/plugin/relativeTime";
-  import { pb } from "@packages/api/src/context";
+  import { pb } from "$lib/stores/pocketbase";
   import { trpc } from "$lib/trpc";
-  pb.autoCancellation(false);
+
   dayjs.extend(relativeTime);
 
   export let reportId: string;
-  let liked = false;
+
+  const userId = $currentUser?.model.id! as never;
   let commenting = false;
   let comment = "";
   let avatar: string;
+  let likers: never[] = [];
+  let commentsLen: number;
+  let upvotesNum: number;
+  let unsubscribeReports: () => void;
+  let unsubscribeComments: () => void;
+
   let user = {
     username: "",
     avatar: "",
@@ -36,7 +41,7 @@
     description: "",
     media: [],
     comments: "",
-    upvotes: {} || 0,
+    upvotes: { value: "[]" } || 0,
     username: "",
     location: {},
     created: "",
@@ -70,20 +75,39 @@
       id: reportId,
     })) as unknown as Record;
 
-    // pb.collection("reports").getOne(reportId, { expand: "user, comments" });
+    unsubscribeReports = await pb
+      .collection("reports")
+      .subscribe(reportId, async ({ action, record }) => {
+        report = record;
+        likers = report.upvotes.value;
+      });
+
+    likers = report.upvotes.value;
 
     user = await pb.collection("users").getOne(report?.user);
 
-    // user = (await trpc.user.get.query({ id: report?.user })) as unknown as Record;
-
     avatar = pb.getFileUrl(user as unknown as Record, user?.avatar);
 
-    const comments = await trpc.comments.get.query(reportId);
+    let comments = (await trpc.comments.get.query(reportId)) as unknown as Record;
+
+    unsubscribeComments = await pb
+      .collection("comments")
+      .subscribe("*", async ({ action, record }) => {
+        // Because we are subscribing to all comments, we need to filter out the ones that are not for this report
+        if (record.report !== reportId) return;
+
+        commentsLen++;
+      });
+
     commentsLen = comments.length;
   });
-  let commentsLen: number;
+  onDestroy(() => {
+    unsubscribeReports();
+    unsubscribeComments();
+  });
 
-  let upvotes = Object.entries(report.upvotes)!;
+  $: liked = likers.includes(userId);
+  $: upvotesNum = report.upvotes.value.length;
 </script>
 
 <div class="w-full  max-h-550px rounded-3xl border p-4 shadow mb-6 flex flex-col bg-white">
@@ -155,13 +179,19 @@
     <div
       class={clsx(liked && "text-secondaryGreen")}
       on:click={async () => {
-        let userId = report.expand?.user?.username;
-        console.log("userId", userId);
-
-        liked = !liked;
-        // const record = await pb.collection("reports").update(reportId, {
-        //   upvotes: { userId: liked },
+        if (liked) {
+          likers = likers?.filter(id => id != userId);
+        } else {
+          likers?.push(userId);
+          // likers = [...likers, userId];
+        }
+        // await trpc.reports.like.mutate({
+        //   id: reportId,
+        //   likers: likers,
         // });
+        await pb.collection("reports").update(reportId, {
+          upvotes: { value: likers },
+        });
       }}
       on:keydown={() => {}}
     >
@@ -185,11 +215,9 @@
     <div class="i-ion-share-social-outline" />
   </div>
 
-  <!-- </div> -->
-
   <div class="pt-3 flex justify-between text-xs text-primaryBlue">
     <div class=" opacity-30">
-      {upvotes.length} <span class="text-xs">thumbs-up</span>
+      {upvotesNum} <span class="text-xs">thumbs-up</span>
     </div>
     <a href="/comments/{reportId}" class=" opacity-50">
       {#if commentsLen > 0}

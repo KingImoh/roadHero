@@ -8,13 +8,9 @@
   import ReportMap from "./ReportMap.svelte";
   import ImageInput from "./ImageInput.svelte";
   import { goto } from "$app/navigation";
+  import { pb } from "$lib/stores/pocketbase";
+  import type { Record } from "pocketbase";
 
-  const cities = [
-    { id: 1, name: "Wuse 2" },
-    { id: 2, name: "Apo" },
-    { id: 3, name: "Gwarimpa" },
-    { id: 3, name: "Maitama" },
-  ];
   let data = {
     description: "",
   };
@@ -26,43 +22,64 @@
   const formData = new FormData();
 
   const submitReport = async () => {
-    loading = true;
-    formData.append("media", media);
+    try {
+      loading = true;
+      formData.append("media", media);
 
-    const report = await trpc.reports.add.mutate({
-      ...data,
-      coords: {
-        value: $reportLocation,
-      },
-
-      user: {
-        email: $currentUser?.email!,
-        password: $currentUser?.password!,
-        id: $currentUser?.model.id!,
-      },
-    });
-
-    // const res = await fetch(`http://localhost:5000/updateReport?id=${report.id}`, {
-    //   method: "POST",
-    //   body: formData,
-    // });
-
-    loading = false;
-
-    $modalState = {
-      title: "Report Submitted",
-      msg: "Your report has been submitted successfully",
-      icon: iconType.success,
-      buttons: [
-        {
-          text: "Ok",
-          handler: () => {
-            goto("/");
-            $modalState.title = "";
-          },
+      const report = (await trpc.reports.add.mutate({
+        ...data,
+        coords: {
+          value: $reportLocation,
         },
-      ],
-    };
+
+        user: {
+          email: $currentUser?.email!,
+          password: $currentUser?.password!,
+          id: $currentUser?.model.id!,
+        },
+      })) as unknown as Record;
+
+      await pb.collection("users").authWithPassword($currentUser?.email!, $currentUser?.password!);
+      await pb.collection("reports").update(report.id, formData);
+
+      // const res = await fetch(`http://localhost:5000/updateReport?id=${report.id}`, {
+      //   method: "POST",
+      //   body: formData,
+      // });
+
+      loading = false;
+
+      $modalState = {
+        title: "Report Submitted",
+        msg: "Your report has been submitted successfully",
+        icon: iconType.success,
+        buttons: [
+          {
+            text: "Ok",
+            handler: () => {
+              goto("/");
+              $modalState.title = "";
+            },
+          },
+        ],
+      };
+    } catch (error) {
+      console.log(error);
+      loading = false;
+      $modalState = {
+        title: "Error",
+        msg: "An error occured while submitting your report",
+        icon: iconType.error,
+        buttons: [
+          {
+            text: "Ok",
+            handler: () => {
+              $modalState.title = "";
+            },
+          },
+        ],
+      };
+    }
   };
 </script>
 

@@ -37,8 +37,6 @@
     const user = await pb.collection("users").getOne(comment?.user as string);
 
     url = pb.getFileUrl(user, comment.expand?.user?.avatar);
-    console.log("comment report Id", comment.report);
-    console.log("url", url);
   });
 
   // function getFileUrl(media: string) {

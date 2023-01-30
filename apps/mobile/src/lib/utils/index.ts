@@ -10,3 +10,6 @@ export function isCollide(a: Element, b: Element) {
     aRect.left > bRect.left + bRect.width
   );
 }
+
+// export const base_url = "http://192.168.0.225:5000";
+export const base_url = "http://localhost:5000";
