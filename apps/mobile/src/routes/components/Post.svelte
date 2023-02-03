@@ -117,8 +117,8 @@
     commentsLen = comments.length;
   });
   onDestroy(async () => {
-    await unsubscribeReports();
-    await unsubscribeComments();
+    // await unsubscribeReports();
+    // await unsubscribeComments();
   });
 
   $: liked = likers.includes(userId);

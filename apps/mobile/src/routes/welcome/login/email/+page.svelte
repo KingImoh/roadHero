@@ -98,8 +98,8 @@
     </button>
     <div class="text-1.25rem">Continue with E-Mail</div>
   </div>
-  <!-- <form on:submit|preventDefault={signIn}> -->
-  <form>
+  <form on:submit|preventDefault={signIn}>
+    <!-- <form> -->
     <div class="space-y-5">
       <div>
         <label class="font-500" for="email">E-Mail</label>
@@ -127,8 +127,8 @@
 
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <button
+        type="submit"
         class="w-full bg-secondaryGreen text-white flex justify-center items-center p-3 rounded-lg"
-        on:submit={signIn}
       >
         {loading ? "Loading..." : "Sign In"}
       </button>

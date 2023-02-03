@@ -109,7 +109,7 @@
           container: "map",
           style: "mapbox://styles/mapbox/streets-v11",
           center: currentPos,
-          zoom: 18,
+          zoom: 14,
         });
         //change map style, add pop up to markers, add marker to current location
 
@@ -120,7 +120,7 @@
             },
             trackUserLocation: true,
             showUserLocation: true,
-            showAccuracyCircle: true,
+            // showAccuracyCircle: true,
             showUserHeading: true,
           })
         );
@@ -190,7 +190,7 @@
 </script>
 
 <div class="square-full relative z-1">
-  <div class="square-full h-90%" id="map">
+  <div class="square-full" id="map">
     {#if !mapPresent}
       <div class="square-full text-center">Loading map</div>
     {/if}
