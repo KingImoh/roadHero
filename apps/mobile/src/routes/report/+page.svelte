@@ -68,7 +68,7 @@
       loading = false;
       $modalState = {
         title: "Error",
-        msg: "An error occured while submitting your report",
+        msg: "An error occured while submitting your report, try again! Make sure you filled all the fields",
         icon: iconType.error,
         buttons: [
           {
@@ -102,14 +102,15 @@
 
   <div class="py-3">
     <div class="mb-2">Upload a photo or video of the issue</div>
-
-    <ImageInput bind:image={media} />
+    <div class="h-200px text-center border border-secondaryGreen rounded-lg">
+      <ImageInput bind:image={media} />
+    </div>
   </div>
 
   <div class="py-3">
     <div class="mb-2">Report a problem</div>
     <textarea
-      class="bg-transparent outline-none border border-gray w-full p-3 h-150px rounded-lg"
+      class="bg-transparent outline-none border border-gray w-full p-3 h-100px rounded-lg"
       placeholder="Describe the issue extensively"
       bind:value={data.description}
     />

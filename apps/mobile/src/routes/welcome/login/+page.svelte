@@ -24,7 +24,7 @@
     <div class="fw300">Continue with Facebook</div>
   </div> -->
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <a class="w-85% rounded-lg p-4 flex items-center bg-grey" href="/welcome/login/email">
+  <a class="w-85% rounded-lg p-4 flex items-center bg-grey" href="/welcome/login/email/new">
     <div class="i-ic-round-email mx-4 w-15%" />
     <div class="fw300">Continue with E-Mail</div>
   </a>

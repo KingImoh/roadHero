@@ -101,9 +101,9 @@
 
         map = new Map({
           container: "map",
-          style: "mapbox://styles/mapbox/streets-v11",
+          style: "mapbox://styles/mapbox/streets-v12",
           center: currentPos,
-          zoom: 14,
+          zoom: 1,
         });
 
         addMarker(map, currentPos);

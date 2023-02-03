@@ -38,7 +38,7 @@ export default router({
         report,
         user,
         content,
-        upvotes,
+        upvotes: { value: [] },
       });
     }),
 });

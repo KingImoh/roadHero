@@ -31,6 +31,19 @@
       ],
     };
   };
+  const comingSoon = () => {
+    $modalState.title = "Coming Soon";
+    $modalState.msg = "This feature is coming soon";
+    $modalState.icon = iconType.info;
+    $modalState.buttons = [
+      {
+        text: "OK",
+        handler: () => {
+          $modalState.title = "";
+        },
+      },
+    ];
+  };
 </script>
 
 <!-- <div w-full>
@@ -75,7 +88,7 @@
     style:background-image="url({avatar})"
   />
 
-  <div class="pt7 pb-2 text-xl max-w-80 flex items-center space-x-2xl">
+  <div class="pt7 pb-2 text-xl flex items-center space-x-2xl">
     {$currentUser?.model.username}
     <!-- svelte-ignore a11y-img-redundant-alt -->
     <img
@@ -87,8 +100,10 @@
 
   <div class="text-sm text-grey opacity-50">{$currentUser?.email}</div>
 
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     class="flex border border-2 p-2 rounded-lg text-sm mt-6 border-secondaryGreen text-secondaryGreen space-x-2"
+    on:click={comingSoon}
   >
     <div class="i-ic-outline-mode-edit text-lg" />
     <div>Edit profile</div>
@@ -97,26 +112,12 @@
 
 <div class="flex flex-col items-center space-y-7 p-4 pt-15">
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div
-    on:click={() => {
-      $modalState.title = "Coming Soon";
-      $modalState.msg = "This feature is coming soon";
-      $modalState.icon = iconType.info;
-      $modalState.buttons = [
-        {
-          text: "OK",
-          handler: () => {
-            $modalState.title = "";
-          },
-        },
-      ];
-    }}
-    class="w-85% shadow rounded-lg h-65px flex items-center bg-white"
-  >
+  <div on:click={comingSoon} class="w-85% shadow rounded-lg h-65px flex items-center bg-white">
     <div class="i-material-symbols-featured-play-list-outline-rounded mx-4 w-15%" />
     <div class="fw300">My Reports</div>
   </div>
-  <div class="w-85% shadow rounded-lg h-65px flex items-center bg-white">
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div on:click={comingSoon} class="w-85% shadow rounded-lg h-65px flex items-center bg-white">
     <div class="i-ion-settings-outline mx-4 w-15%" />
     <div class="fw300">Settings</div>
   </div>

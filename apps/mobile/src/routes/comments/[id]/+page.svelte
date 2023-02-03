@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { pb } from "@packages/api/src/context";
+  import { pb } from "$lib/stores/pocketbase";
   import { onMount } from "svelte";
   import Comment from "../../components/Comment.svelte";
   import welcome from "$lib/assets/img/welcome-3.png";

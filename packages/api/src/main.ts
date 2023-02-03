@@ -59,16 +59,11 @@ app.post("/signup", async (req, reply) => {
       username,
     });
 
-    // console.dir({ user }, { depth: 10 });
-    const { token, record } = await pb.collection("users").create({
-      email,
-      password,
-      passwordConfirm,
-      username,
-    });
+    const { token, record } = user;
+
     reply
       .setCookie("pb_auth", pb.authStore.exportToCookie().slice(14))
-      .send({ record, token, cookie: pb.authStore.exportToCookie() });
+      .send({ record: user, token, cookie: pb.authStore.exportToCookie(), worked: true });
   } catch (e) {
     // if (e instanceof ClientResponseError) {
     //   if (e.data.username.code === "validation_not_unique") {
@@ -79,6 +74,7 @@ app.post("/signup", async (req, reply) => {
     // } else {
     //   throw error(401, "Unknown error occured");
     // }
+    console.log("error signing up", e);
 
     reply.send({ ...e });
   }

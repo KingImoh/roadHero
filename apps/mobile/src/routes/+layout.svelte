@@ -19,17 +19,19 @@
   $: if ($currentUser === null) {
     goto("/welcome");
   }
+
+  $: showFooter = $currentUser && !$page.url.pathname.includes("comments");
 </script>
 
 <div
   id="app"
   class="relative h-screen w-full overflow-x-hidden pb-[var(--footerH)] bg-[#F5F5F5]"
-  style:--footerH="{footerHeight}px"
+  style:--footerH="{showFooter ? footerHeight : 0}px"
 >
   <slot />
 </div>
 
-{#if $currentUser && !$page.url.pathname.includes("comments")}
+{#if showFooter}
   <Footer bind:footerHeight />
 {/if}
 

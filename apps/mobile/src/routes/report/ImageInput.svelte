@@ -36,7 +36,7 @@
 
 <label
   class={clsx(
-    "input relative flex h-100px cursor-pointer items-center justify-center hover:brightness-150 group",
+    "square-full rounded-full flex justify-center items-center hover:brightness-150",
     {
       "hover:after:!opacity-60 hover:brightness-100 p-0": !!image,
     },
@@ -44,12 +44,9 @@
   )}
 >
   <h1
-    class={clsx(
-      "i-icon-park-outline-add-picture bg-secondaryGreen text-3xl z-10 transition-opacity",
-      {
-        "absolute opacity-0 group-hover:opacity-100": !!image,
-      }
-    )}
+    class={clsx("i-ep-picture-rounded bg-secondaryGreen text-3xl z-10 transition-opacity", {
+      "absolute opacity-0 group-hover:opacity-100": !!image,
+    })}
   >
     {image ? "Click to update Image" : "Click To Upload Image"}
   </h1>
@@ -64,7 +61,6 @@
     class="pointer-events-none absolute opacity-0"
     type="file"
     accept="image/*"
-    required
     multiple
   />
 </label>
@@ -95,8 +91,8 @@
 </div>
 
 <style>
-  label::after {
+  /* label::after {
     content: "";
     @apply absolute top-0 left-0 h-full w-full bg-black opacity-0 transition-opacity;
-  }
+  } */
 </style>

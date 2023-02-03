@@ -99,7 +99,7 @@
 
         map = new Map({
           container: "map",
-          style: "mapbox://styles/mapbox/streets-v11",
+          style: "mapbox://styles/mapbox/streets-v12",
           center: currentPos,
           zoom: 14,
         });
@@ -108,6 +108,17 @@
 
         // Add zoom and rotation controls to the map.
         map.addControl(new mapboxgl.NavigationControl()); // defaults to top-right
+        map.addControl(
+          new mapboxgl.GeolocateControl({
+            positionOptions: {
+              enableHighAccuracy: true,
+            },
+            trackUserLocation: true,
+            showUserLocation: true,
+            // showAccuracyCircle: true,
+            showUserHeading: true,
+          })
+        );
 
         map.on("load", async () => {
           // make an initial directions request that
@@ -175,7 +186,7 @@
       <div class="square-full text-center">Loading map</div>
     {/if}
   </div>
-  <!-- <MapSearch /> -->
+  <MapSearch />
 </div>
 
 <!-- <absolute-bottom-right>o

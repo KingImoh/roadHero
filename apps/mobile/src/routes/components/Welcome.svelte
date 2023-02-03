@@ -42,7 +42,7 @@
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div
     class="bg-secondaryGreen p-4 flex flex-col-items-center justify-center text-white rounded-lg w-90%"
-    on:click={goto("/welcome/login")}
+    on:click={goto("/welcome/login/")}
   >
     Get Started!
   </div>

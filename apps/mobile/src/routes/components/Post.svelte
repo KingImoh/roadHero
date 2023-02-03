@@ -11,7 +11,7 @@
   import clsx from "clsx";
   import type { BaseModel, Record } from "pocketbase";
   import { onDestroy, onMount } from "svelte";
-  import { currentUser } from "$lib/stores";
+  import { currentUser, iconType, modalState } from "$lib/stores";
   import { goto } from "$app/navigation";
   import dayjs from "dayjs";
   import relativeTime from "dayjs/plugin/relativeTime";
@@ -61,11 +61,25 @@
     const res = await trpc.comments.add.mutate({
       user: $currentUser?.model.id!,
       report: reportId,
-      upvotes: {},
+      upvotes: { value: [] },
       content: comment,
     });
     comment = "";
     commenting = false;
+
+    $modalState = {
+      title: "Comment Successful",
+      msg: "You have successfully commented.",
+      buttons: [
+        {
+          text: "OK",
+          handler: () => {
+            $modalState.title = "";
+          },
+        },
+      ],
+      icon: "success",
+    };
   };
 
   onMount(async () => {
@@ -82,7 +96,7 @@
         likers = report.upvotes.value;
       });
 
-    likers = report.upvotes.value;
+    likers = report.upvotes.value ?? [];
 
     user = await pb.collection("users").getOne(report?.user);
 
@@ -98,12 +112,13 @@
 
         commentsLen++;
       });
+    // console.log(report);
 
     commentsLen = comments.length;
   });
-  onDestroy(() => {
-    unsubscribeReports();
-    unsubscribeComments();
+  onDestroy(async () => {
+    await unsubscribeReports();
+    await unsubscribeComments();
   });
 
   $: liked = likers.includes(userId);
@@ -125,7 +140,51 @@
       </div>
     </div>
 
-    <div class="ml-a place-self-start i-mingcute-more-1-line text-sm" />
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div
+      class="ml-a place-self-start i-mingcute-more-1-line text-sm"
+      on:click={() => {
+        $modalState = {
+          title: "Report Options",
+          msg: "What would you like to do?",
+          buttons: [
+            {
+              text: "Mark as Resolved",
+              handler: () => {
+                console.log("Marked as REsolved");
+
+                $modalState.title = "";
+              },
+            },
+            {
+              text: "Cancel",
+              handler: () => {
+                $modalState.title = "";
+              },
+            },
+          ],
+          icon: iconType.info,
+        };
+        if ($currentUser?.model.id === report.user) {
+          $modalState.buttons.unshift(
+            {
+              text: "Edit",
+              color: "bg-primaryBlue! text-white",
+              handler: () => {
+                // goto(`/report/${reportId}`);
+              },
+            },
+            {
+              text: "Delete",
+              color: "bg-red! text-white",
+              handler: () => {
+                $modalState.title = "";
+              },
+            }
+          );
+        }
+      }}
+    />
   </div>
 
   <div class="h-65% space-y-2">
@@ -227,17 +286,16 @@
 
   <!-- Comment section -->
   {#if commenting}
-    <div class="w-full my-4 mx-auto">
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
-        class="text-xs text-primaryBlue opacity-70 mb-3"
-        on:click={() => {
-          goto("/comments/" + reportId);
-        }}
-      >
-        View comments
-      </div>
-      <div class="h-1px opacity-50 bg-[#E8E8E8] w-full" />
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div
+      class="w-full my-4 mx-auto flex items-center text-primaryBlue opacity-90"
+      on:click={() => {
+        goto("/comments/" + reportId);
+      }}
+    >
+      <div class="h-1px w-35%" />
+      <div class="text-xs op">view comments</div>
+      <div class="h-1px w-35%" />
     </div>
 
     <div class="bg-grey w-full p-3 rounded-lg flex justify-between">
@@ -246,12 +304,12 @@
         class="bg-transparent w-70% outline-none "
         placeholder="Comment"
         bind:value={comment}
-      />
+      /><!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="square-30px rounded-full bg-secondaryGreen flex justify-center items-center text-white"
+        on:click={makeComment}
       >
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div class="i-mingcute-send-plane-line" on:click={makeComment} />
+        <div class="i-mingcute-send-plane-line" />
       </div>
     </div>
   {/if}

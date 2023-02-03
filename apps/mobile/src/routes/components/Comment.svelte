@@ -1,50 +1,55 @@
 <script lang="ts">
-  // import { pb } from "@packages/api/src/context";
   import { pb } from "$lib/stores/pocketbase";
-
+  //@ts-ignore
   import { Record } from "pocketbase";
   import { onMount } from "svelte";
   import dayjs from "dayjs";
   import relativeTime from "dayjs/plugin/relativeTime";
   import { trpc } from "$lib/trpc";
+  import { currentUser } from "$lib/stores";
 
   dayjs.extend(relativeTime);
-  pb.autoCancellation(false);
-  let liked = false;
-  const like = () => {
-    liked = !liked;
-  };
+
+  let likers: never[] = [];
+  let url: string;
+  const userId = $currentUser?.model.id! as never;
 
   export let commentId: string;
 
+  console.log("commentId", commentId);
+
+  let user = {
+    username: "",
+    avatar: "",
+  } as unknown as Record;
+
   let comment = {
     content: "",
-    created: "",
     upvotes: {},
     report: "",
     user: "",
-    expand: { user: { username: "", avatar: "" } },
-  };
-  let url: string;
+    expand: { user: user },
+  } as unknown as Record;
+
   onMount(async () => {
     comment = (await trpc.comments.getOne.query({
       id: commentId,
       expand: "user",
     })) as unknown as Record;
-    // pb.collection("comments").getOne(commentId, {
-    //   expand: "user",
-    // });
-    const user = await pb.collection("users").getOne(comment?.user as string);
 
-    url = pb.getFileUrl(user, comment.expand?.user?.avatar);
+    likers = comment.upvotes.value;
+
+    await pb.collection("comments").subscribe(commentId, async ({ action, record }) => {
+      likers = comment.upvotes.value;
+    });
+
+    const user = await pb.collection("users").getOne(comment?.user as string);
+    // console.log("user", user);
+
+    url = pb.getFileUrl(user, user?.avatar);
   });
 
-  // function getFileUrl(media: string) {
-  // let url = pb.getFileUrl(comment as unknown as Record, comment.expand?.user?.avatar);
-  // console.log("url", url);
-
-  //   return url;
-  // }
+  $: liked = likers.includes(userId);
 </script>
 
 <div class="flex space-x-6 p-3  bg-white rounded-lg m-2 max-h-200px">
@@ -55,13 +60,13 @@
     />
   </div>
   <div>
-    <div class="font-semibold">{comment.expand?.user?.username}</div>
+    <div class="font-semibold">{user?.username}</div>
     <div class="max-h-70px overflow-auto w-55">
       {comment.content}
     </div>
     <div class="flex justify-between mt-4 text-sm opacity-70">
       <div>{dayjs(comment.created).fromNow()}</div>
-      <div>{Object.entries(comment.upvotes).length} upvotes</div>
+      <div>{likers.length} upvotes</div>
     </div>
   </div>
   <div class="flex items-center">
@@ -70,7 +75,21 @@
       class="{liked
         ? 'i-ion-md-thumbs-up'
         : 'i-icon-park-outline-thumbs-up'} text-xl bg-secondaryGreen"
-      on:click={like}
+      on:click={async () => {
+        // console.log(likers, liked);
+
+        if (liked) {
+          likers = likers?.filter(id => id != userId);
+        } else {
+          likers?.push(userId);
+        }
+        console.log("liker", commentId, likers);
+
+        await pb.collection("comments").update(commentId, {
+          upvotes: { value: likers },
+        });
+        console.log("About to like ", likers, liked);
+      }}
     />
   </div>
 </div>

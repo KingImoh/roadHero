@@ -12,11 +12,26 @@ export const iconType = {
   success: "i-ep-success-filled bg-secondaryGreen",
 };
 
+interface btn {
+  text: string;
+  color: string;
+  handler: () => void;
+}
+type PartiallyOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+type btnWithOptionalColor = PartiallyOptional<btn, "color">;
+
+let btn: btnWithOptionalColor = {
+  text: "",
+  color: "",
+  handler: () => {},
+};
+
 export const modalState = writable({
   title: "",
   msg: "",
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  buttons: [{ text: "", handler: () => {} }],
+  buttons: [btn],
   icon: "",
 });
 

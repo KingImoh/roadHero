@@ -14,12 +14,6 @@
   import type { Writable } from "svelte/store";
   import { Geolocation } from "@capacitor/geolocation";
 
-  (async () => {
-    const coordinates = await Geolocation.getCurrentPosition();
-
-    // console.log("Current position:", , [coordinates.coords.latitude, coordinates.coords.longitude]);
-  })();
-
   type Coordinates = [number, number];
 
   let mapPresent = false;
@@ -28,10 +22,11 @@
   let currentMarker: Marker;
 
   const newReportLocations = getContext<Writable<Coordinates>>("report-location");
+
   const addMarker = (map: Map, location: LngLatLike, options?: MarkerOptions) => {
     var popup = new mapboxgl.Popup({ closeOnClick: false })
       .setLngLat(location)
-      .setHTML("<p>A report has been made in this location already</p>")
+      .setHTML("<p>A report has been made in this location already</p><br> View Report")
       .addTo(map);
     return new Marker(options).setLngLat(location).setPopup(popup).addTo(map);
   };

@@ -7,11 +7,11 @@
   let start: string, end: string;
 
   let searching = false;
-  let event: KeyboardEvent;
+  // let event: KeyboardEvent;
 
   onMount(() => {
     const mbScript = document.createElement("script");
-    mbScript.src = "/god-abeg.js";
+    mbScript.src = "/addressAutocomplete.js";
     mbScript.defer = true;
     mbScript.id = "search-js";
 
@@ -108,7 +108,7 @@
   </form>
 
   <!-- Location List and Suggestions -->
-  <div class="mt-5 h-215px overflow-auto">
+  <div class="mt-5 h-200px overflow-auto">
     {#each $searchHistory as element}
       <!-- Location Suggestion -->
       <div class="border-b-2 border-grey py-4 flex items-center space-x-4">
@@ -119,12 +119,14 @@
         </div>
       </div>
     {/each}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
     <div
-      class="bg-grey p-2 flex text-center space-x-4 justify-center border border-t-none rounded-t-none border-secondaryGreen rounded-lg"
+      class="bg-grey p-2 flex items-center space-x-4 justify-center border mt-2 border-secondaryGreen rounded-lg"
+      on:click={() => {
+        searching = false;
+      }}
     >
-      <div>
-        <div class="">Choose Location on Map</div>
-      </div>
+      <div>Find Location on Map</div>
       <div class="i-ri-road-map-fill  bg-secondaryGreen" />
     </div>
   </div>
