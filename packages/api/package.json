@@ -22,6 +22,7 @@
     "@fastify/multipart": "^7.4.0",
     "@trpc/server": "^10.9.0",
     "dayjs": "^1.11.7",
+    "dotenv": "^16.0.3",
     "fastify": "^4.12.0",
     "pocketbase": "^0.10.1",
     "zod": "^3.20.2"

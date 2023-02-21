@@ -10,7 +10,8 @@ import { object, string } from "zod";
 // import { ClientResponseError } from "pocketbase";
 
 const app = fastify({ maxParamLength: 5000 });
-
+import dotenv from "dotenv";
+dotenv.config();
 app.register(cors, {
   origin: "*",
   // credentials: true,
@@ -160,7 +161,7 @@ Object.keys(ifaces).forEach(function (ifname) {
   try {
     app.listen(
       {
-        port: 5000,
+        port: +process?.env?.PORT || 5000,
       },
       (err, address) => {
         if (err) {

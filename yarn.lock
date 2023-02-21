@@ -913,6 +913,7 @@ __metadata:
     "@trpc/server": ^10.9.0
     "@types/node": ^18.11.18
     dayjs: ^1.11.7
+    dotenv: ^16.0.3
     esbuild: ^0.17.4
     fastify: ^4.12.0
     pocketbase: ^0.10.1
@@ -2108,6 +2109,13 @@ __metadata:
   dependencies:
     ssr-window: ^4.0.0
   checksum: b38604f74e915b4d05b6634f9ff239a708c468180f498a28ff67f2a61233697d9bd7192703b788a24541c3591e7f1a6e83a2cbf70bc871a85e033f82e19abc31
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^16.0.3":
+  version: 16.0.3
+  resolution: "dotenv@npm:16.0.3"
+  checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
 
