@@ -5,7 +5,8 @@
     "dev": "turbo run dev --parallel",
     "preview": "turbo run preview --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "start":"turbo run start --filter=api"
   },
   "devDependencies": {
     "@apps/mobile": "workspace:*",
